@@ -1,0 +1,26 @@
+--cpu Cortex-M3
+"do_an\startup_stm32f103xb.o"
+"do_an\i2c-lcd.o"
+"do_an\main.o"
+"do_an\stm32f1xx_it.o"
+"do_an\stm32f1xx_hal_msp.o"
+"do_an\cjson.o"
+"do_an\stm32f1xx_hal_gpio_ex.o"
+"do_an\stm32f1xx_hal_i2c.o"
+"do_an\stm32f1xx_hal_tim.o"
+"do_an\stm32f1xx_hal_tim_ex.o"
+"do_an\stm32f1xx_hal_uart.o"
+"do_an\stm32f1xx_hal.o"
+"do_an\stm32f1xx_hal_rcc.o"
+"do_an\stm32f1xx_hal_rcc_ex.o"
+"do_an\stm32f1xx_hal_gpio.o"
+"do_an\stm32f1xx_hal_dma.o"
+"do_an\stm32f1xx_hal_cortex.o"
+"do_an\stm32f1xx_hal_pwr.o"
+"do_an\stm32f1xx_hal_flash.o"
+"do_an\stm32f1xx_hal_flash_ex.o"
+"do_an\system_stm32f1xx.o"
+--library_type=microlib --strict --scatter "Do_An\Do_An.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "Do_An.map" -o Do_An\Do_An.axf
