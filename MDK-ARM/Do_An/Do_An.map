@@ -302,7 +302,6 @@ Section Cross References
     r305.o(i.fingerIDSearch) refers to i2c-lcd.o(i.lcd_put_cur) for lcd_put_cur
     r305.o(i.fingerIDSearch) refers to i2c-lcd.o(i.lcd_send_string) for lcd_send_string
     r305.o(i.fingerIDSearch) refers to stm32f1xx_hal_gpio.o(i.HAL_GPIO_TogglePin) for HAL_GPIO_TogglePin
-    r305.o(i.fingerIDSearch) refers to stm32f1xx_hal.o(i.HAL_Delay) for HAL_Delay
     r305.o(i.fingerIDSearch) refers to r305.o(i.fingerFastSearch) for fingerFastSearch
     r305.o(i.fingerIDSearch) refers to r305.o(.data) for .data
     r305.o(i.getImage) refers to r305.o(i.writePacket) for writePacket
@@ -384,10 +383,11 @@ Section Cross References
     main.o(i.themvantay) refers to i2c-lcd.o(i.lcd_put_cur) for lcd_put_cur
     main.o(i.themvantay) refers to i2c-lcd.o(i.lcd_send_string) for lcd_send_string
     main.o(i.themvantay) refers to r305.o(i.verifyPassword) for verifyPassword
+    main.o(i.themvantay) refers to r305.o(i.fingerIDSearch) for fingerIDSearch
+    main.o(i.themvantay) refers to stm32f1xx_hal.o(i.HAL_Delay) for HAL_Delay
     main.o(i.themvantay) refers to flash.o(i.Flash_Read_Int) for Flash_Read_Int
     main.o(i.themvantay) refers to r305.o(i.fingerEnroll) for fingerEnroll
     main.o(i.themvantay) refers to i2c-lcd.o(i.lcd_send_data) for lcd_send_data
-    main.o(i.themvantay) refers to stm32f1xx_hal.o(i.HAL_Delay) for HAL_Delay
     main.o(i.themvantay) refers to flash.o(i.Flash_Erase) for Flash_Erase
     main.o(i.themvantay) refers to flash.o(i.Flash_Write_Int) for Flash_Write_Int
     main.o(i.themvantay) refers to main.o(.data) for .data
@@ -1985,28 +1985,28 @@ Image Symbol Table
     i.deleteModel                            0x08001fbc   Section        0  r305.o(i.deleteModel)
     i.emptyDatabase                          0x08002010   Section        0  r305.o(i.emptyDatabase)
     i.fingerEnroll                           0x08002050   Section        0  r305.o(i.fingerEnroll)
-    i.fingerFastSearch                       0x080021b0   Section        0  r305.o(i.fingerFastSearch)
-    i.fingerIDSearch                         0x08002218   Section        0  r305.o(i.fingerIDSearch)
-    i.getImage                               0x080022e8   Section        0  r305.o(i.getImage)
-    i.getReply                               0x08002328   Section        0  r305.o(i.getReply)
-    i.image2Tz                               0x080023bc   Section        0  r305.o(i.image2Tz)
-    i.lcd_clear                              0x08002400   Section        0  i2c-lcd.o(i.lcd_clear)
-    i.lcd_init                               0x08002418   Section        0  i2c-lcd.o(i.lcd_init)
-    i.lcd_put_cur                            0x08002490   Section        0  i2c-lcd.o(i.lcd_put_cur)
-    i.lcd_send_cmd                           0x080024a8   Section        0  i2c-lcd.o(i.lcd_send_cmd)
-    i.lcd_send_data                          0x080024e8   Section        0  i2c-lcd.o(i.lcd_send_data)
-    i.lcd_send_string                        0x08002528   Section        0  i2c-lcd.o(i.lcd_send_string)
-    i.main                                   0x0800253c   Section        0  main.o(i.main)
-    i.nutnhan                                0x08002620   Section        0  main.o(i.nutnhan)
-    i.storeModel                             0x080027d8   Section        0  r305.o(i.storeModel)
-    i.themvantay                             0x08002824   Section        0  main.o(i.themvantay)
-    i.vantay                                 0x08002910   Section        0  main.o(i.vantay)
-    i.verifyPassword                         0x08002a1c   Section        0  r305.o(i.verifyPassword)
-    i.writePacket                            0x08002a7c   Section        0  r305.o(i.writePacket)
-    i.xoavantay                              0x08002b84   Section        0  main.o(i.xoavantay)
-    i.xoavantayall                           0x08002c54   Section        0  main.o(i.xoavantayall)
-    .constdata                               0x08002cbc   Section       16  system_stm32f1xx.o(.constdata)
-    .constdata                               0x08002ccc   Section        8  system_stm32f1xx.o(.constdata)
+    i.fingerFastSearch                       0x080021a8   Section        0  r305.o(i.fingerFastSearch)
+    i.fingerIDSearch                         0x08002210   Section        0  r305.o(i.fingerIDSearch)
+    i.getImage                               0x08002290   Section        0  r305.o(i.getImage)
+    i.getReply                               0x080022d0   Section        0  r305.o(i.getReply)
+    i.image2Tz                               0x08002364   Section        0  r305.o(i.image2Tz)
+    i.lcd_clear                              0x080023a8   Section        0  i2c-lcd.o(i.lcd_clear)
+    i.lcd_init                               0x080023c0   Section        0  i2c-lcd.o(i.lcd_init)
+    i.lcd_put_cur                            0x08002438   Section        0  i2c-lcd.o(i.lcd_put_cur)
+    i.lcd_send_cmd                           0x08002450   Section        0  i2c-lcd.o(i.lcd_send_cmd)
+    i.lcd_send_data                          0x08002490   Section        0  i2c-lcd.o(i.lcd_send_data)
+    i.lcd_send_string                        0x080024d0   Section        0  i2c-lcd.o(i.lcd_send_string)
+    i.main                                   0x080024e4   Section        0  main.o(i.main)
+    i.nutnhan                                0x080025c8   Section        0  main.o(i.nutnhan)
+    i.storeModel                             0x08002780   Section        0  r305.o(i.storeModel)
+    i.themvantay                             0x080027cc   Section        0  main.o(i.themvantay)
+    i.vantay                                 0x080028f0   Section        0  main.o(i.vantay)
+    i.verifyPassword                         0x080029fc   Section        0  r305.o(i.verifyPassword)
+    i.writePacket                            0x08002a5c   Section        0  r305.o(i.writePacket)
+    i.xoavantay                              0x08002b64   Section        0  main.o(i.xoavantay)
+    i.xoavantayall                           0x08002c74   Section        0  main.o(i.xoavantayall)
+    .constdata                               0x08002cdc   Section       16  system_stm32f1xx.o(.constdata)
+    .constdata                               0x08002cec   Section        8  system_stm32f1xx.o(.constdata)
     .data                                    0x20000000   Section       12  r305.o(.data)
     .data                                    0x2000000c   Section       16  main.o(.data)
     .data                                    0x2000001c   Section       12  stm32f1xx_hal.o(.data)
@@ -2214,30 +2214,30 @@ Image Symbol Table
     deleteModel                              0x08001fbd   Thumb Code    66  r305.o(i.deleteModel)
     emptyDatabase                            0x08002011   Thumb Code    52  r305.o(i.emptyDatabase)
     fingerEnroll                             0x08002051   Thumb Code   222  r305.o(i.fingerEnroll)
-    fingerFastSearch                         0x080021b1   Thumb Code    88  r305.o(i.fingerFastSearch)
-    fingerIDSearch                           0x08002219   Thumb Code   146  r305.o(i.fingerIDSearch)
-    getImage                                 0x080022e9   Thumb Code    52  r305.o(i.getImage)
-    getReply                                 0x08002329   Thumb Code   142  r305.o(i.getReply)
-    image2Tz                                 0x080023bd   Thumb Code    56  r305.o(i.image2Tz)
-    lcd_clear                                0x08002401   Thumb Code    24  i2c-lcd.o(i.lcd_clear)
-    lcd_init                                 0x08002419   Thumb Code   120  i2c-lcd.o(i.lcd_init)
-    lcd_put_cur                              0x08002491   Thumb Code    24  i2c-lcd.o(i.lcd_put_cur)
-    lcd_send_cmd                             0x080024a9   Thumb Code    58  i2c-lcd.o(i.lcd_send_cmd)
-    lcd_send_data                            0x080024e9   Thumb Code    58  i2c-lcd.o(i.lcd_send_data)
-    lcd_send_string                          0x08002529   Thumb Code    20  i2c-lcd.o(i.lcd_send_string)
-    main                                     0x0800253d   Thumb Code   186  main.o(i.main)
-    nutnhan                                  0x08002621   Thumb Code   286  main.o(i.nutnhan)
-    storeModel                               0x080027d9   Thumb Code    62  r305.o(i.storeModel)
-    themvantay                               0x08002825   Thumb Code   170  main.o(i.themvantay)
-    vantay                                   0x08002911   Thumb Code   162  main.o(i.vantay)
-    verifyPassword                           0x08002a1d   Thumb Code    80  r305.o(i.verifyPassword)
-    writePacket                              0x08002a7d   Thumb Code   260  r305.o(i.writePacket)
-    xoavantay                                0x08002b85   Thumb Code   148  main.o(i.xoavantay)
-    xoavantayall                             0x08002c55   Thumb Code    74  main.o(i.xoavantayall)
-    AHBPrescTable                            0x08002cbc   Data          16  system_stm32f1xx.o(.constdata)
-    APBPrescTable                            0x08002ccc   Data           8  system_stm32f1xx.o(.constdata)
-    Region$$Table$$Base                      0x08002cd4   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08002cf4   Number         0  anon$$obj.o(Region$$Table)
+    fingerFastSearch                         0x080021a9   Thumb Code    88  r305.o(i.fingerFastSearch)
+    fingerIDSearch                           0x08002211   Thumb Code    98  r305.o(i.fingerIDSearch)
+    getImage                                 0x08002291   Thumb Code    52  r305.o(i.getImage)
+    getReply                                 0x080022d1   Thumb Code   142  r305.o(i.getReply)
+    image2Tz                                 0x08002365   Thumb Code    56  r305.o(i.image2Tz)
+    lcd_clear                                0x080023a9   Thumb Code    24  i2c-lcd.o(i.lcd_clear)
+    lcd_init                                 0x080023c1   Thumb Code   120  i2c-lcd.o(i.lcd_init)
+    lcd_put_cur                              0x08002439   Thumb Code    24  i2c-lcd.o(i.lcd_put_cur)
+    lcd_send_cmd                             0x08002451   Thumb Code    58  i2c-lcd.o(i.lcd_send_cmd)
+    lcd_send_data                            0x08002491   Thumb Code    58  i2c-lcd.o(i.lcd_send_data)
+    lcd_send_string                          0x080024d1   Thumb Code    20  i2c-lcd.o(i.lcd_send_string)
+    main                                     0x080024e5   Thumb Code   186  main.o(i.main)
+    nutnhan                                  0x080025c9   Thumb Code   286  main.o(i.nutnhan)
+    storeModel                               0x08002781   Thumb Code    62  r305.o(i.storeModel)
+    themvantay                               0x080027cd   Thumb Code   212  main.o(i.themvantay)
+    vantay                                   0x080028f1   Thumb Code   162  main.o(i.vantay)
+    verifyPassword                           0x080029fd   Thumb Code    80  r305.o(i.verifyPassword)
+    writePacket                              0x08002a5d   Thumb Code   260  r305.o(i.writePacket)
+    xoavantay                                0x08002b65   Thumb Code   180  main.o(i.xoavantay)
+    xoavantayall                             0x08002c75   Thumb Code    74  main.o(i.xoavantayall)
+    AHBPrescTable                            0x08002cdc   Data          16  system_stm32f1xx.o(.constdata)
+    APBPrescTable                            0x08002cec   Data           8  system_stm32f1xx.o(.constdata)
+    Region$$Table$$Base                      0x08002cf4   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08002d14   Number         0  anon$$obj.o(Region$$Table)
     fingerID                                 0x20000000   Data           2  r305.o(.data)
     confidence                               0x20000002   Data           2  r305.o(.data)
     thePassword                              0x20000004   Data           4  r305.o(.data)
@@ -2266,9 +2266,9 @@ Memory Map of the image
 
   Image Entry point : 0x080000ed
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00002d20, Max: 0x00010000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00002d40, Max: 0x00010000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00002cf4, Max: 0x00010000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00002d14, Max: 0x00010000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -2393,43 +2393,43 @@ Memory Map of the image
     0x08001f7c   0x08001f7c   0x00000040   Code   RO          776    i.createModel       r305.o
     0x08001fbc   0x08001fbc   0x00000054   Code   RO          777    i.deleteModel       r305.o
     0x08002010   0x08002010   0x00000040   Code   RO          778    i.emptyDatabase     r305.o
-    0x08002050   0x08002050   0x00000160   Code   RO          779    i.fingerEnroll      r305.o
-    0x080021b0   0x080021b0   0x00000068   Code   RO          780    i.fingerFastSearch  r305.o
-    0x08002218   0x08002218   0x000000d0   Code   RO          781    i.fingerIDSearch    r305.o
-    0x080022e8   0x080022e8   0x00000040   Code   RO          782    i.getImage          r305.o
-    0x08002328   0x08002328   0x00000094   Code   RO          783    i.getReply          r305.o
-    0x080023bc   0x080023bc   0x00000044   Code   RO          784    i.image2Tz          r305.o
-    0x08002400   0x08002400   0x00000018   Code   RO           13    i.lcd_clear         i2c-lcd.o
-    0x08002418   0x08002418   0x00000078   Code   RO           14    i.lcd_init          i2c-lcd.o
-    0x08002490   0x08002490   0x00000018   Code   RO           15    i.lcd_put_cur       i2c-lcd.o
-    0x080024a8   0x080024a8   0x00000040   Code   RO           16    i.lcd_send_cmd      i2c-lcd.o
-    0x080024e8   0x080024e8   0x00000040   Code   RO           17    i.lcd_send_data     i2c-lcd.o
-    0x08002528   0x08002528   0x00000014   Code   RO           18    i.lcd_send_string   i2c-lcd.o
-    0x0800253c   0x0800253c   0x000000e4   Code   RO          962    i.main              main.o
-    0x08002620   0x08002620   0x000001b8   Code   RO          963    i.nutnhan           main.o
-    0x080027d8   0x080027d8   0x0000004c   Code   RO          785    i.storeModel        r305.o
-    0x08002824   0x08002824   0x000000ec   Code   RO          965    i.themvantay        main.o
-    0x08002910   0x08002910   0x0000010c   Code   RO          966    i.vantay            main.o
-    0x08002a1c   0x08002a1c   0x00000060   Code   RO          786    i.verifyPassword    r305.o
-    0x08002a7c   0x08002a7c   0x00000108   Code   RO          787    i.writePacket       r305.o
-    0x08002b84   0x08002b84   0x000000d0   Code   RO          967    i.xoavantay         main.o
-    0x08002c54   0x08002c54   0x00000068   Code   RO          968    i.xoavantayall      main.o
-    0x08002cbc   0x08002cbc   0x00000010   Data   RO         3795    .constdata          system_stm32f1xx.o
-    0x08002ccc   0x08002ccc   0x00000008   Data   RO         3796    .constdata          system_stm32f1xx.o
-    0x08002cd4   0x08002cd4   0x00000020   Data   RO         4221    Region$$Table       anon$$obj.o
+    0x08002050   0x08002050   0x00000158   Code   RO          779    i.fingerEnroll      r305.o
+    0x080021a8   0x080021a8   0x00000068   Code   RO          780    i.fingerFastSearch  r305.o
+    0x08002210   0x08002210   0x00000080   Code   RO          781    i.fingerIDSearch    r305.o
+    0x08002290   0x08002290   0x00000040   Code   RO          782    i.getImage          r305.o
+    0x080022d0   0x080022d0   0x00000094   Code   RO          783    i.getReply          r305.o
+    0x08002364   0x08002364   0x00000044   Code   RO          784    i.image2Tz          r305.o
+    0x080023a8   0x080023a8   0x00000018   Code   RO           13    i.lcd_clear         i2c-lcd.o
+    0x080023c0   0x080023c0   0x00000078   Code   RO           14    i.lcd_init          i2c-lcd.o
+    0x08002438   0x08002438   0x00000018   Code   RO           15    i.lcd_put_cur       i2c-lcd.o
+    0x08002450   0x08002450   0x00000040   Code   RO           16    i.lcd_send_cmd      i2c-lcd.o
+    0x08002490   0x08002490   0x00000040   Code   RO           17    i.lcd_send_data     i2c-lcd.o
+    0x080024d0   0x080024d0   0x00000014   Code   RO           18    i.lcd_send_string   i2c-lcd.o
+    0x080024e4   0x080024e4   0x000000e4   Code   RO          962    i.main              main.o
+    0x080025c8   0x080025c8   0x000001b8   Code   RO          963    i.nutnhan           main.o
+    0x08002780   0x08002780   0x0000004c   Code   RO          785    i.storeModel        r305.o
+    0x080027cc   0x080027cc   0x00000124   Code   RO          965    i.themvantay        main.o
+    0x080028f0   0x080028f0   0x0000010c   Code   RO          966    i.vantay            main.o
+    0x080029fc   0x080029fc   0x00000060   Code   RO          786    i.verifyPassword    r305.o
+    0x08002a5c   0x08002a5c   0x00000108   Code   RO          787    i.writePacket       r305.o
+    0x08002b64   0x08002b64   0x00000110   Code   RO          967    i.xoavantay         main.o
+    0x08002c74   0x08002c74   0x00000068   Code   RO          968    i.xoavantayall      main.o
+    0x08002cdc   0x08002cdc   0x00000010   Data   RO         3795    .constdata          system_stm32f1xx.o
+    0x08002cec   0x08002cec   0x00000008   Data   RO         3796    .constdata          system_stm32f1xx.o
+    0x08002cf4   0x08002cf4   0x00000020   Data   RO         4221    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08002cf4, Size: 0x00000578, Max: 0x00005000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08002d14, Size: 0x00000578, Max: 0x00005000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08002cf4   0x0000000c   Data   RW          789    .data               r305.o
-    0x2000000c   0x08002d00   0x00000010   Data   RW          979    .data               main.o
-    0x2000001c   0x08002d10   0x0000000c   Data   RW         2925    .data               stm32f1xx_hal.o
-    0x20000028   0x08002d1c   0x00000004   Data   RW         3797    .data               system_stm32f1xx.o
+    0x20000000   0x08002d14   0x0000000c   Data   RW          789    .data               r305.o
+    0x2000000c   0x08002d20   0x00000010   Data   RW          979    .data               main.o
+    0x2000001c   0x08002d30   0x0000000c   Data   RW         2925    .data               stm32f1xx_hal.o
+    0x20000028   0x08002d3c   0x00000004   Data   RW         3797    .data               system_stm32f1xx.o
     0x2000002c        -       0x00000054   Zero   RW          788    .bss                r305.o
     0x20000080        -       0x000000d4   Zero   RW          969    .bss                main.o
-    0x20000154   0x08002d20   0x00000004   PAD
+    0x20000154   0x08002d40   0x00000004   PAD
     0x20000158        -       0x00000020   Zero   RW         3619    .bss                stm32f1xx_hal_flash.o
     0x20000178        -       0x00000400   Zero   RW            1    STACK               startup_stm32f103xb.o
 
@@ -2443,8 +2443,8 @@ Image component sizes
 
         72          0          0          0          0       1517   flash.o
        316         12          0          0          0     448182   i2c-lcd.o
-      1798        474          0         16        212       9054   main.o
-      1648        322          0         12         84       8853   r305.o
+      1918        520          0         16        212       9202   main.o
+      1560        282          0         12         84       8821   r305.o
         36          8        236          0       1024        776   startup_stm32f103xb.o
        164         28          0         12          0       5673   stm32f1xx_hal.o
        194         14          0          0          0      25579   stm32f1xx_hal_cortex.o
@@ -2462,7 +2462,7 @@ Image component sizes
         72         16         24          4          0       1075   system_stm32f1xx.o
 
     ----------------------------------------------------------------------
-     11058       1202        292         44       1356     555497   Object Totals
+     11090       1208        292         44       1356     555613   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         16          0          0          0          4          0   (incl. Padding)
 
@@ -2504,15 +2504,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     11216       1218        292         44       1356     550121   Grand Totals
-     11216       1218        292         44       1356     550121   ELF Image Totals
-     11216       1218        292         44          0          0   ROM Totals
+     11248       1224        292         44       1356     550237   Grand Totals
+     11248       1224        292         44       1356     550237   ELF Image Totals
+     11248       1224        292         44          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                11508 (  11.24kB)
+    Total RO  Size (Code + RO Data)                11540 (  11.27kB)
     Total RW  Size (RW Data + ZI Data)              1400 (   1.37kB)
-    Total ROM Size (Code + RO Data + RW Data)      11552 (  11.28kB)
+    Total ROM Size (Code + RO Data + RW Data)      11584 (  11.31kB)
 
 ==============================================================================
 

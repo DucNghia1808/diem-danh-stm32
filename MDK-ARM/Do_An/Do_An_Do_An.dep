@@ -39,7 +39,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x60253186)
 I (C:\Keil_v5\ARM\ARMCC\include\float.h)(0x6025318E)
 I (..\jSON\cJSON.h)(0x5FED3992)
 I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x6025318E)
-F (..\as608\R305.c)(0x634521C2)(--c99 -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\I2C -I ..\jSON -I ..\as608 -I ..\uart -I ..\flash -I ..\ring_buf-I.\RTE\_Do_An-IC:\Users\nghia\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\nghia\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.4.0\Device\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o do_an\r305.o --omf_browse do_an\r305.crf --depend do_an\r305.d)
+F (..\as608\R305.c)(0x634570B0)(--c99 -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\I2C -I ..\jSON -I ..\as608 -I ..\uart -I ..\flash -I ..\ring_buf-I.\RTE\_Do_An-IC:\Users\nghia\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\nghia\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.4.0\Device\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o do_an\r305.o --omf_browse do_an\r305.crf --depend do_an\r305.d)
 I (..\as608\R305.h)(0x63441D05)
 I (../Inc/main.h)(0x63423B8F)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x61FE4B5F)
@@ -98,7 +98,7 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h)(0x61FE4B5F)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h)(0x61FE4B5F)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h)(0x61FE4B5F)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h)(0x61FE4B5F)
-F (../Src/main.c)(0x634521C2)(--c99 -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\I2C -I ..\jSON -I ..\as608 -I ..\uart -I ..\flash -I ..\ring_buf-I.\RTE\_Do_An-IC:\Users\nghia\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\nghia\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.4.0\Device\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o do_an\main.o --omf_browse do_an\main.crf --depend do_an\main.d)
+F (../Src/main.c)(0x63456FE4)(--c99 -c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\I2C -I ..\jSON -I ..\as608 -I ..\uart -I ..\flash -I ..\ring_buf-I.\RTE\_Do_An-IC:\Users\nghia\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\nghia\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.4.0\Device\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o do_an\main.o --omf_browse do_an\main.crf --depend do_an\main.d)
 I (../Inc/main.h)(0x63423B8F)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x61FE4B5F)
 I (../Inc/stm32f1xx_hal_conf.h)(0x63423B8E)

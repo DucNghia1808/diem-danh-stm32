@@ -278,7 +278,7 @@ uint8_t fingerEnroll(uint8_t id)
 	if(p != FINGERPRINT_OK)
 	{
 		lcd_put_cur(1,0);
-		lcd_send_string("  LOI TAO KI TU 2  ");
+		lcd_send_string("    LOI   ");
 		return 0;
 	}
 	
@@ -326,21 +326,22 @@ int fingerIDSearch(void)
   if (p != FINGERPRINT_OK)
 	{
 		lcd_clear();
-		lcd_put_cur(0,0);
+		lcd_put_cur(1,0);
 		lcd_send_string("LOI TAO KI TU");
 		return -1;
 	}	
-	HAL_Delay(1000);
+	//HAL_Delay(1000);
+	//HAL_Delay(10);
 	
 	p = fingerFastSearch();
   if (p != FINGERPRINT_OK)
 	{
-		lcd_clear();
+		/*lcd_clear();
 		lcd_put_cur(0,0);
 		lcd_send_string("  VAN TAY SAI  ");
 		lcd_put_cur(1,0);
 		lcd_send_string("XIN HAY THU LAI");
-		HAL_Delay(1000);
+		HAL_Delay(1000);*/
 		return -1;
 	}
   return fingerID; 

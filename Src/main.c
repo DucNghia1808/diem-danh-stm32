@@ -485,39 +485,51 @@ void themvantay()
 		
 		if(verifyPassword() == 1 )
 		{	
-			IDE = Flash_Read_Int(ADDRESS_DATA_STORAGE);
-			int x = fingerEnroll(IDE);
-			if ( x == 99)
-			{
+			int	v = fingerIDSearch(); // tim xem co van tay khong
+			if (v == -1){ // neu co van tay roi
+				IDE = Flash_Read_Int(ADDRESS_DATA_STORAGE);
+				int x = fingerEnroll(IDE);
+				if ( x == 99)
+				{
+					ok = false;
+				}
+				else if (x == 0)
+				{
+					lcd_put_cur(1,1);
+					lcd_send_string("       LOI      ");
+					HAL_Delay(1000);
+				}
+				else if(x == 1 )// XÁC NHAN NHAP DUNG VAN TAY HAI LAN
+				{
+					//lcd_clear();
+					lcd_put_cur(1,1);
+					lcd_send_string("THEM OK ID: ");
+					lcd_send_data(IDE/10 + 0x30);
+					lcd_send_data(IDE%10 + 0x30);
+					HAL_Delay(1000);
+					
+				}
+				/*else 
+				{
+					lcd_put_cur(1,1);
+					lcd_send_string("  DA TON TAI  ");
+					HAL_Delay(1000);
+				}*/
+				IDE++;
+				Flash_Erase(ADDRESS_DATA_STORAGE);
+				Flash_Write_Int(ADDRESS_DATA_STORAGE,IDE);
 				ok = false;
 			}
-			else if (x == 0)
-			{
-				lcd_put_cur(1,1);
-				lcd_send_string("       LOI      ");
-				HAL_Delay(1000);
+			else if (v == 999){
+				ok = false;
 			}
-			else if(x == 1)// XÁC NHAN NHAP DUNG VAN TAY HAI LAN
-			{
-				//lcd_clear();
+			else {
 				lcd_put_cur(1,1);
-				lcd_send_string("THEM OK ID: ");
-				lcd_send_data(IDE/10 + 0x30);
-				lcd_send_data(IDE%10 + 0x30);
+				lcd_send_string("  DA TON TAI ");
 				HAL_Delay(1000);
-				
+				//ok = false;
 			}
-			/*else 
-			{
-				lcd_put_cur(1,1);
-				lcd_send_string("  DA TON TAI  ");
-				HAL_Delay(1000);
-			}*/
-			IDE++;
-			Flash_Erase(ADDRESS_DATA_STORAGE);
-			Flash_Write_Int(ADDRESS_DATA_STORAGE,IDE);
-			ok = false;
-		}
+	}
 
 		lcd_clear();
 }
@@ -539,11 +551,18 @@ void xoavantay()
 		{
 			deleteModel(y);
 			lcd_put_cur(1,0);
-			lcd_send_string(" DA XOA ");
+			lcd_send_string("  DA XOA  ");
 			lcd_put_cur(1,8);
-			lcd_send_string("ID: ");
+			lcd_send_string("  ID: ");
 			lcd_send_data(y/10 + 0x30);
 			lcd_send_data(y%10 + 0x30);
+			HAL_Delay(1000);
+		}
+		else { // khong co van tay
+			lcd_put_cur(0,0);
+			lcd_send_string("  VAN TAY SAI  ");
+			lcd_put_cur(1,0);
+			lcd_send_string("XIN HAY THU LAI");
 			HAL_Delay(1000);
 		}
 		lcd_clear ();
