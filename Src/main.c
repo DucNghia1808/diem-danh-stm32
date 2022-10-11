@@ -26,8 +26,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "i2c-lcd.h"
 #include "cJSON.h"
+//#include "usart.h"
+#include "R305.h"
+#include "flash.h"
+#include "ringbuf.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,10 +53,13 @@
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
 
+TIM_HandleTypeDef htim2;
+
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-
+#define ADDRESS_DATA_STORAGE	0x800FC00
+RINGBUF RX_BUF;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -59,6 +67,8 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART2_UART_Init(void);
+//static void MX_USART1_UART_Init(void);
+static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 
 // truyen printf
@@ -74,7 +84,11 @@ PUTCHAR_PROTOTYPE
 	return ch;
 }
 void nutnhan();
-void send_data_uart(uint8_t ND, uint8_t DA, uint8_t tb1, uint8_t tb2, uint8_t c1);
+void send_data_uart(uint8_t Mode, uint8_t Admin, uint8_t Id, uint8_t Name);
+void themvantay();
+void xoavantay();
+void xoavantayall();
+void vantay();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -82,13 +96,18 @@ void send_data_uart(uint8_t ND, uint8_t DA, uint8_t tb1, uint8_t tb2, uint8_t c1
 uint8_t start = 0;
 uint8_t data[] = "HELLO";
 
-uint8_t ND = 0;
-uint8_t DA = 0;
-uint8_t TB1 = 0;
-uint8_t TB2 = 0;
-uint8_t C1 = 30;
-uint8_t ifan = 1;
+uint8_t Mode = 0;
+uint8_t Admin = 0;
+uint8_t Id = 0;
+uint8_t Name = 0;
+int IDE;
+int y;
 
+int mode_vantay = 0;// bien mode
+bool ok = false;
+
+
+uint8_t buf4[25];
 uint8_t rx_data;
 char rx_buffer[100];
 unsigned int rx_index = 0;
@@ -128,7 +147,12 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_USART2_UART_Init();
+  MX_USART1_UART_Init();
+  MX_TIM2_Init();
+	
   /* USER CODE BEGIN 2 */
+	
+	HAL_TIM_Base_Start_IT(&htim2);
 	// khoi tao LCD
   lcd_init();
 	lcd_put_cur(0, 0);
@@ -143,12 +167,22 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 		nutnhan();
-		send_data_uart(ND, DA, TB1, TB2, C1);
-		HAL_Delay(2000);
+		if (mode_vantay == 1 && ok == true){
+			themvantay();
+		}
+		else if (mode_vantay == 2 && ok == true){
+			xoavantay();
+		}
+		else if (mode_vantay == 3 && ok == true){
+			xoavantayall();
+		}
+		else if (mode_vantay == 4 && ok == true){
+			vantay();
+		}
 		
-  }
-  /* USER CODE END 3 */
+/* USER CODE END 3 */
 }
+	}
 
 /**
   * @brief System Clock Configuration
@@ -222,6 +256,58 @@ static void MX_I2C1_Init(void)
 }
 
 /**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 7200;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 19999;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+
+}
+
+/**
+  * @brief USART1 Initialization Function
+  * @param None
+  * @retval None
+  */
+
+
+/**
   * @brief USART2 Initialization Function
   * @param None
   * @retval None
@@ -290,16 +376,22 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void nutnhan()
 {
-	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_1) == 0)
+	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_1) == 0) // chon mode
 	{
 		HAL_Delay(20);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+		mode_vantay+=1;
+		if (mode_vantay == 5){
+			mode_vantay = 1;
+		}
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_1) == 0);
 	}
-	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == 0)
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == 0)  // bool OK
 	{
 		HAL_Delay(20);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+		ok = true;
+		lcd_clear(); // clear menu
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == 0);
 	}
 	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == 0)
@@ -308,39 +400,204 @@ void nutnhan()
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == 0);
 	}
+	
+	if (mode_vantay == 1){
+		lcd_put_cur(0, 0);
+		lcd_send_string("|> THEM VAN TAY   ");
+		lcd_put_cur(1, 0);
+		lcd_send_string("|  XOA VAN TAY   ");
+	}
+	else if (mode_vantay == 2){
+		lcd_put_cur(0, 0);
+		lcd_send_string("|  THEM VAN TAY   ");
+		lcd_put_cur(1, 0);
+		lcd_send_string("|> XOA VAN TAY   ");
+	}
+	else if (mode_vantay == 3){
+		lcd_put_cur(0, 0);
+		lcd_send_string("|  XOA VAN TAY   ");
+		lcd_put_cur(1, 0);
+		lcd_send_string("|> XOA TOAN BO   ");
+	}
+	else if (mode_vantay == 4){
+		lcd_put_cur(0, 0);
+		lcd_send_string("|  XOA TOAN BO   ");
+		lcd_put_cur(1, 0);
+		lcd_send_string("|>  DIEM DANH    ");
+	}
+	/*else 
+	{
+		//lcd_clear();
+		lcd_put_cur(0, 0);
+		lcd_send_string("MAN HINH CHINH");
+	}*/
 }
 
-void send_data_uart(uint8_t ND, uint8_t DA, uint8_t tb1, uint8_t tb2, uint8_t c1)
+
+void vantay()
+{	
+		if(verifyPassword() == 1 )
+		{
+			IDE = fingerIDSearch();  // ID
+			if(IDE == -1)
+			{
+				//HAL_Delay(1000);
+			}
+			else if (IDE == 999) // thoat mode diem danh
+			{
+				ok = false;
+			}
+			else   //////// doc thu cong // truy xuat sql
+			{
+				if(IDE == 0 )
+				{
+					lcd_put_cur(0, 0);
+					lcd_send_string("    DIEM DANH    ");
+					lcd_put_cur(1, 0);
+					lcd_send_string("  FOUND ADMIN     ");
+					HAL_Delay(2000);
+				}
+
+				if(IDE == 1)
+				{
+					lcd_put_cur(0, 0);
+					lcd_send_string("    DIEM DANH    ");
+					lcd_put_cur(1, 0);
+					lcd_send_string("  FOUND NGHIA     ");
+					HAL_Delay(2000);
+				}
+				if(IDE==3)
+				{
+					lcd_put_cur(0, 0);
+					lcd_send_string("   DIEM DANH    ");
+					lcd_put_cur(1, 0);
+					lcd_send_string("  FOUND MINH     ");
+					HAL_Delay(2000);
+				}
+			}
+		}
+}
+void themvantay()
+{		
+		lcd_clear();
+		lcd_put_cur(0, 0);
+		lcd_send_string("  THEM VAN TAY  ");
+		
+		if(verifyPassword() == 1 )
+		{	
+			IDE = Flash_Read_Int(ADDRESS_DATA_STORAGE);
+			int x = fingerEnroll(IDE);
+			if ( x == 99)
+			{
+				ok = false;
+			}
+			else if (x == 0)
+			{
+				lcd_put_cur(1,1);
+				lcd_send_string("       LOI      ");
+				HAL_Delay(1000);
+			}
+			else if(x == 1)// XÁC NHAN NHAP DUNG VAN TAY HAI LAN
+			{
+				//lcd_clear();
+				lcd_put_cur(1,1);
+				lcd_send_string("THEM OK ID: ");
+				lcd_send_data(IDE/10 + 0x30);
+				lcd_send_data(IDE%10 + 0x30);
+				HAL_Delay(1000);
+				
+			}
+			/*else 
+			{
+				lcd_put_cur(1,1);
+				lcd_send_string("  DA TON TAI  ");
+				HAL_Delay(1000);
+			}*/
+			IDE++;
+			Flash_Erase(ADDRESS_DATA_STORAGE);
+			Flash_Write_Int(ADDRESS_DATA_STORAGE,IDE);
+			ok = false;
+		}
+
+		lcd_clear();
+}
+void xoavantay()
+{
+	if(verifyPassword() == 1 )
+	{	
+		lcd_clear();
+		lcd_put_cur(0, 0);
+		lcd_send_string("   XOA VAN TAY  ");
+		lcd_put_cur(1,0);
+		lcd_send_string("MOI DAT TAY VAO");
+		y = fingerIDSearch();
+		if (y == 999)
+		{
+			// thoat khoi xoa van tay
+		}
+		else if (y != -1) // co van tay thi xoa
+		{
+			deleteModel(y);
+			lcd_put_cur(1,0);
+			lcd_send_string(" DA XOA ");
+			lcd_put_cur(1,8);
+			lcd_send_string("ID: ");
+			lcd_send_data(y/10 + 0x30);
+			lcd_send_data(y%10 + 0x30);
+			HAL_Delay(1000);
+		}
+		lcd_clear ();
+		ok = false;
+	}
+}
+
+void xoavantayall()
+{
+	if(verifyPassword() == 1 )
+	{
+		emptyDatabase();
+		lcd_clear();
+		lcd_put_cur(1,1);
+		lcd_send_string("      DA XOA     ");
+		HAL_Delay(1000);
+		lcd_clear ();
+		ok = false;
+		IDE=0;
+		Flash_Erase(ADDRESS_DATA_STORAGE);
+		Flash_Write_Int(ADDRESS_DATA_STORAGE,0);
+	}
+}
+void send_data_uart(uint8_t Mode, uint8_t Admin, uint8_t Id, uint8_t Name)
 {
 	char JSON[100] = "";
-	char Str_ND[10] = ""; 
-	char Str_DA[10] = "";
-	char Str_TB1[10] = "";
-	char Str_TB2[10] = "";
-	char Str_C1[10] = "";
+	char Str_Mode[10] = ""; 
+	char Str_Admin[10] = "";
+	char Str_Id[10] = "";
+	char Str_Name[10] = "";
 
-	sprintf(Str_ND, "%d", ND); 
-	sprintf(Str_DA, "%d", DA);
-	sprintf(Str_TB1, "%d", tb1);
-	sprintf(Str_TB2, "%d", tb2);
-	sprintf(Str_C1, "%d", c1);
+	sprintf(Str_Mode, "%d", Mode); 
+	sprintf(Str_Admin, "%d", Admin);
+	sprintf(Str_Id, "%d", Id);
+	sprintf(Str_Name, "%d", Name);
 	// {\"TB1\":"1"}
-	strcat(JSON, "{\"ND\":\"");
-	strcat(JSON, Str_ND); strcat(JSON, "\",");
-	strcat(JSON, "\"DA\":\"");
-	strcat(JSON, Str_DA); strcat(JSON, "\",");
+	strcat(JSON, "{\"Mode\":\"");
+	strcat(JSON, Str_Mode); strcat(JSON, "\",");
+	strcat(JSON, "\"Admin\":\"");
+	strcat(JSON, Str_Admin); strcat(JSON, "\",");
 
-	strcat(JSON, "\"TB1\":\"");
-	strcat(JSON, Str_TB1); strcat(JSON, "\",");
-	strcat(JSON, "\"TB2\":\"");
-	strcat(JSON, Str_TB2); strcat(JSON, "\",");
-	
-	strcat(JSON, "\"C1\":\"");
-	strcat(JSON, Str_C1); strcat(JSON, "\"}\n");
-
-	//strcat(JSON, "\r\n");
+	strcat(JSON, "\"Id\":\"");
+	strcat(JSON, Str_Id); strcat(JSON, "\",");
+	strcat(JSON, "\"Name\":\"");
+	strcat(JSON, Str_Name); strcat(JSON, "\"}\n");
 	HAL_UART_Transmit(&huart2, JSON, sizeof(JSON), 10); // gui 500ms 1 lan // ,10 timeout 
-	//printf("data: %s", JSON);
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) // call back interupt timer
+{
+	if(htim->Instance == htim2.Instance){
+		//HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+		//send_data_uart(mode_vantay, Admin, IDE, Name);
+	}
 }
 /* USER CODE END 4 */
 

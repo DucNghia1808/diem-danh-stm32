@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xB</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\I2C;..\jSON</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\I2C;..\jSON;..\as608;..\uart;..\flash;..\ring_buf</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -399,6 +399,21 @@
               <FilePath>..\I2C\i2c-lcd.c</FilePath>
             </File>
             <File>
+              <FileName>cJSON.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\jSON\cJSON.c</FilePath>
+            </File>
+            <File>
+              <FileName>R305.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\as608\R305.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\flash\flash.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/main.c</FilePath>
@@ -414,9 +429,9 @@
               <FilePath>../Src/stm32f1xx_hal_msp.c</FilePath>
             </File>
             <File>
-              <FileName>cJSON.c</FileName>
+              <FileName>ringbuf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\jSON\cJSON.c</FilePath>
+              <FilePath>..\ring_buf\ringbuf.c</FilePath>
             </File>
           </Files>
         </Group>
