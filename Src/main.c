@@ -88,10 +88,12 @@ void quetphim();
 
 
 void send_data_uart(uint8_t Mode, uint8_t Admin, uint8_t Id, uint8_t Name);
+void send_data_uart1(uint8_t Mode, uint8_t Admin, uint8_t Id, char * Name);
 void themvantay();
 void xoavantay();
 void xoavantayall();
 void vantay();
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -164,8 +166,10 @@ int main(void)
 	HAL_TIM_Base_Start_IT(&htim2);
 	// khoi tao LCD
   lcd_init();
-	/*lcd_put_cur(0, 0);
-	lcd_send_string("DO AN TOT NGHIEP");*/
+	lcd_put_cur(0, 0);
+	lcd_send_string("DO AN TOT NGHIEP");
+	HAL_Delay(3000);
+	lcd_clear();
 	// set keypad
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
@@ -174,7 +178,7 @@ int main(void)
 	
 	m = 0;
 	lcd_put_cur(0, 0);
-	lcd_send_string(">");
+	//lcd_send_string(">");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -184,7 +188,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		/*nutnhan();
+		nutnhan();
 		if (mode_vantay == 1 && ok == true){
 			themvantay();
 		}
@@ -198,13 +202,15 @@ int main(void)
 			vantay();
 		}
 		else if (mode_vantay == 5 && ok == true){
-			lcd_put_cur(0, 0);
-			lcd_send_string("     NHAP TEN     ");
-
-					quetphim();
-				//HAL_Delay(1000);
-		}*/
-		quetphim();
+				lcd_clear();
+				lcd_put_cur(0, 0);
+				lcd_send_string(">");
+			while (ok == true)
+			{
+				quetphim();
+			}
+		}
+		//quetphim();
   /* USER CODE END 3 */
 }
 }
@@ -411,11 +417,7 @@ void quetphim()
 		A4-A7 -> output  // moi dau set 1 het
 		PB0, PB4, PB5 -> input
 	*/
-   // set m = 0 //////
-
 	////////////// QUET VONG 1
-
-	
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
 	/* KEY1 */
 	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0) // chon mode
@@ -435,7 +437,7 @@ void quetphim()
 	}
 	
 	/* KEY2 */
-	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0) // chon mode
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0)
 	{
 		value = 65; // so 1
 		HAL_Delay(10);
@@ -460,7 +462,7 @@ void quetphim()
 	}
 	
 	/* KEY3 */
-	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0) // chon mode
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0) 
 	{
 		value = 68; // so 1
 		HAL_Delay(10);
@@ -487,7 +489,7 @@ void quetphim()
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 			/* KEY4 */
-	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0) // chon mode
+	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0) 
 	{
 		value = 71; // so 1
 		HAL_Delay(10);
@@ -511,7 +513,7 @@ void quetphim()
 		col++;
 	}
 		/* KEY5 */
-	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0) // chon mode
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0) 
 	{
 		value = 74; // so 1
 		HAL_Delay(10);
@@ -535,7 +537,7 @@ void quetphim()
 		col++;
 	}
 			/* KEY6 */
-	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0) // chon mode
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0)
 	{
 		value = 77; // so 1
 		HAL_Delay(10);
@@ -563,7 +565,7 @@ void quetphim()
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
 	/* KEY7 */
-	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0) // chon mode
+	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0) 
 	{
 		value = 80; // so 1
 		HAL_Delay(10);
@@ -587,7 +589,7 @@ void quetphim()
 		col++;
 	}
 		/* KEY8 */
-	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0) // chon mode
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0) 
 	{
 		value = 84; // so 1
 		HAL_Delay(10);
@@ -611,7 +613,7 @@ void quetphim()
 		col++;
 	}
 			/* KEY9 */
-	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0) // chon mode
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0) 
 	{
 		value = 87; // so 1
 		HAL_Delay(10);
@@ -646,12 +648,15 @@ void quetphim()
 		lcd_put_cur(0,0);
 		lcd_send_string(">>");
 		lcd_put_cur(0,2);
+		char ten[30] = "";
 		for(int a = 0; a<m; a++)
 		{
 			lcd_send_data(msg[a]);
+			ten[a]+=msg[a];
 		}
+		send_data_uart1(mode_vantay, Admin, Id, ten);
 		HAL_Delay(3000);
-		for(int a = 0; a<30; a++)
+		for(int a = 0; a<30; a++)  // clear name buffer
 		{
 			msg[a] = 0;
 			m = 0; 
@@ -954,6 +959,29 @@ void send_data_uart(uint8_t Mode, uint8_t Admin, uint8_t Id, uint8_t Name)
 	strcat(JSON, Str_Id); strcat(JSON, "\",");
 	strcat(JSON, "\"Name\":\"");
 	strcat(JSON, Str_Name); strcat(JSON, "\"}\n");
+	HAL_UART_Transmit(&huart2, JSON, sizeof(JSON), 10); // gui 500ms 1 lan // ,10 timeout 
+}
+void send_data_uart1(uint8_t Mode, uint8_t Admin, uint8_t Id, char * Name)
+{
+	char JSON[40] = "";
+	char Str_Mode[2] = ""; 
+	char Str_Admin[2] = "";
+	char Str_Id[2] = "";
+	//char Str_Name[30] = "";
+
+	sprintf(Str_Mode, "%d", Mode); 
+	sprintf(Str_Admin, "%d", Admin);
+	sprintf(Str_Id, "%d", Id);
+	// 
+	strcat(JSON, "{\"Mode\":\"");
+	strcat(JSON, Str_Mode); strcat(JSON, "\",");
+	strcat(JSON, "\"Admin\":\"");
+	strcat(JSON, Str_Admin); strcat(JSON, "\",");
+
+	strcat(JSON, "\"Id\":\"");
+	strcat(JSON, Str_Id); strcat(JSON, "\",");
+	strcat(JSON, "\"Name\":\"");
+	strcat(JSON, Name); strcat(JSON, "\"}\n");
 	HAL_UART_Transmit(&huart2, JSON, sizeof(JSON), 10); // gui 500ms 1 lan // ,10 timeout 
 }
 
