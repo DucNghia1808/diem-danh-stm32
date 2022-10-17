@@ -7,6 +7,8 @@ uint16_t fingerID, confidence;
 uint8_t recvPacket[20];
 uint32_t thePassword = 0;
 uint32_t theAddress = 0xFFFFFFFF;
+
+
 UART_HandleTypeDef huart1;
 /* FINGERPRINT function */
 void MX_USART1_UART_Init(void)

@@ -55,6 +55,7 @@ I2C_HandleTypeDef hi2c1;
 
 TIM_HandleTypeDef htim2;
 
+//UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
@@ -67,7 +68,6 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART2_UART_Init(void);
-//static void MX_USART1_UART_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -84,6 +84,9 @@ PUTCHAR_PROTOTYPE
 	return ch;
 }
 void nutnhan();
+void quetphim();
+
+
 void send_data_uart(uint8_t Mode, uint8_t Admin, uint8_t Id, uint8_t Name);
 void themvantay();
 void xoavantay();
@@ -102,6 +105,13 @@ uint8_t Id = 0;
 uint8_t Name = 0;
 int IDE;
 int y;
+int i, m; // quet phim i, j va m gia tri tung phan tu cua mang
+int value; // gia tri ascii cua ban phim
+int l = 1000; // sô lan vong lap for quet phim
+char msg[30];
+int delay_phim = 100;
+int col = 0;
+int	row = 1;
 
 int mode_vantay = 0;// bien mode
 bool ok = false;
@@ -149,7 +159,6 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART1_UART_Init();
   MX_TIM2_Init();
-	
   /* USER CODE BEGIN 2 */
 	
 	HAL_TIM_Base_Start_IT(&htim2);
@@ -157,6 +166,15 @@ int main(void)
   lcd_init();
 	lcd_put_cur(0, 0);
 	lcd_send_string("DO AN TOT NGHIEP");
+	// set keypad
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+	
+	m = 0;
+	lcd_put_cur(0, 0);
+	lcd_send_string("     NHAP TEN     ");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -166,7 +184,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		nutnhan();
+		/*nutnhan();
 		if (mode_vantay == 1 && ok == true){
 			themvantay();
 		}
@@ -179,10 +197,17 @@ int main(void)
 		else if (mode_vantay == 4 && ok == true){
 			vantay();
 		}
-		
-/* USER CODE END 3 */
+		else if (mode_vantay == 5 && ok == true){
+			lcd_put_cur(0, 0);
+			lcd_send_string("     NHAP TEN     ");
+
+					quetphim();
+				//HAL_Delay(1000);
+		}*/
+		quetphim();
+  /* USER CODE END 3 */
 }
-	}
+}
 
 /**
   * @brief System Clock Configuration
@@ -306,12 +331,6 @@ static void MX_TIM2_Init(void)
   * @retval None
   */
 
-
-/**
-  * @brief USART2 Initialization Function
-  * @param None
-  * @retval None
-  */
 static void MX_USART2_UART_Init(void)
 {
 
@@ -358,6 +377,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7, GPIO_PIN_RESET);
+
   /*Configure GPIO pin : PC13 */
   GPIO_InitStruct.Pin = GPIO_PIN_13;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -365,8 +387,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PB1 PB10 PB11 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_10|GPIO_PIN_11;
+  /*Configure GPIO pins : PA4 PA5 PA6 PA7 */
+  GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB0 PB1 PB10 PB11 
+                           PB4 PB5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_10|GPIO_PIN_11 
+                          |GPIO_PIN_4|GPIO_PIN_5;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -374,6 +405,296 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void quetphim()
+{
+	 /*
+		A4-A7 -> output  // moi dau set 1 het
+		PB0, PB4, PB5 -> input
+	*/
+   // set m = 0 //////
+
+	////////////// QUET VONG 1
+
+	
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+	/* KEY1 */
+	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0) // chon mode
+	{
+		value = 49; // so 1
+		HAL_Delay(10);
+		lcd_put_cur(row, col);
+		lcd_send_data(msg[m] = value);
+		value--;
+		if(value==32)
+        value=49;
+		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0);
+		m++;
+		i = 0;
+		col++;
+		HAL_Delay(delay_phim); 
+	}
+	
+	/* KEY2 */
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0) // chon mode
+	{
+		value = 65; // so 1
+		HAL_Delay(10);
+		for (i=0; i<l; i++)
+		{
+			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0)
+			{
+				lcd_put_cur(row, col);
+				lcd_send_data(msg[m] = value);
+				value++;
+        if(value == 68)
+          value = 50;
+        if(value == 51)
+          value = 65;
+				while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0);
+				i = 0;
+				HAL_Delay(delay_phim);
+			}
+		}
+		m++;
+		col++;
+	}
+	
+	/* KEY3 */
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0) // chon mode
+	{
+		value = 68; // so 1
+		HAL_Delay(10);
+		for (i=0; i<l; i++)
+		{
+			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0)
+			{
+				lcd_put_cur(row, col);
+				lcd_send_data(msg[m] = value);
+				value++;
+        if(value == 71)
+          value = 51;
+        if(value == 52)
+          value = 68;
+				while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0);
+				i = 0; 
+				HAL_Delay(delay_phim);
+			}
+		}
+		m++;
+		col++; // tang cot lcd
+	}
+	/////////////// QUET VONG 2
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+			/* KEY4 */
+	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0) // chon mode
+	{
+		value = 71; // so 1
+		HAL_Delay(10);
+		for (i=0; i<l; i++)
+		{
+			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0)
+			{
+				lcd_put_cur(row, col);
+				lcd_send_data(msg[m] = value);
+				value++;
+        if(value == 74)
+          value = 52;
+        if(value == 53)
+          value = 71;
+				while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0);
+				i = 0;
+				HAL_Delay(delay_phim);
+			}
+		}
+		m++;
+		col++;
+	}
+		/* KEY5 */
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0) // chon mode
+	{
+		value = 74; // so 1
+		HAL_Delay(10);
+		for (i=0; i<l; i++)
+		{
+			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0)
+			{
+				lcd_put_cur(row, col);
+				lcd_send_data(msg[m] = value);
+				value++;
+        if(value == 77)
+          value = 53;
+        if(value == 54)
+          value = 74;
+				while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0);
+				i = 0;
+				HAL_Delay(delay_phim);
+			}
+		}
+		m++;
+		col++;
+	}
+			/* KEY6 */
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0) // chon mode
+	{
+		value = 77; // so 1
+		HAL_Delay(10);
+		for (i=0; i<l; i++)
+		{
+			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0)
+			{
+				lcd_put_cur(row, col);
+				lcd_send_data(msg[m] = value);
+				value++;
+        if(value == 80)
+          value = 54;
+        if(value == 55)
+          value = 77;
+				while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0);
+				i = 0;
+				HAL_Delay(delay_phim);
+			}
+		}
+		m++;
+		col++;
+	}
+	
+	//////////// QUET VONG 3
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
+	/* KEY7 */
+	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0) // chon mode
+	{
+		value = 80; // so 1
+		HAL_Delay(10);
+		for (i=0; i<l; i++)
+		{
+			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0)
+			{
+				lcd_put_cur(row, col);
+				lcd_send_data(msg[m] = value);
+				value++;
+        if(value == 84)
+          value = 55;
+        if(value == 56)
+          value = 80;
+				while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0);
+				i = 0;
+				HAL_Delay(delay_phim);
+			}
+		}
+		m++;
+		col++;
+	}
+		/* KEY8 */
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0) // chon mode
+	{
+		value = 84; // so 1
+		HAL_Delay(10);
+		for (i=0; i<l; i++)
+		{
+			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0)
+			{
+				lcd_put_cur(row, col);
+				lcd_send_data(msg[m] = value);
+				value++;
+        if(value == 87)
+          value = 56;
+        if(value == 57)
+          value = 84;
+				while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0);
+				i = 0;
+				HAL_Delay(delay_phim);
+			}
+		}
+		m++;
+		col++;
+	}
+			/* KEY9 */
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0) // chon mode
+	{
+		value = 87; // so 1
+		HAL_Delay(10);
+		for (i=0; i<l; i++)
+		{
+			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0)
+			{
+				lcd_put_cur(row, col);
+				lcd_send_data(msg[m] = value);
+				value++;
+        if(value == 91)
+          value = 57;
+        if(value == 58)
+          value = 87;
+				while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0);
+				i = 0;
+				HAL_Delay(delay_phim);
+			}
+		}
+		m++;
+		col++;
+	}	
+	///////// QUET LAN 4
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
+	
+	/* KEY  * */
+	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0) // chon mode
+	{
+		ok = false;
+		lcd_put_cur(0,0);
+		lcd_send_string(">>");
+		lcd_put_cur(0,3);
+		for(int a = 0; a<m; a++)
+		{
+			lcd_send_data(msg[a]);
+		}
+		HAL_Delay(3000);
+		lcd_clear();
+		for(int a = 0; a<30; a++)
+		{
+			msg[a] = 0;
+			m = 0; 
+		}
+		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0);
+	}
+		/* KEY0 */
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0) // chon mode
+	{
+		value = 48; // so 1
+		HAL_Delay(10);
+		for (i=0; i<l; i++)
+		{
+			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0)
+			{
+				lcd_put_cur(row, col);
+				lcd_send_data(msg[m] = value);
+				value = value - 16;
+        if(value < 32)  // laanf hai nhan value = 48 + 16
+          value = 48;
+				while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0);
+				i = 0;
+				HAL_Delay(delay_phim);
+			}
+		}
+		m++;
+		col++;
+	}
+			/* KEY #   delete */
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0) // chon mode
+	{
+		m--;
+		col--;
+		lcd_put_cur(row, col);
+		lcd_send_string(" ");
+		lcd_put_cur(row, col);
+		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0);
+		HAL_Delay(delay_phim);
+	}	
+	if(col >= 15)col = 0;
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+}
+
 void nutnhan()
 {
 	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_1) == 0) // chon mode
@@ -381,7 +702,7 @@ void nutnhan()
 		HAL_Delay(20);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 		mode_vantay+=1;
-		if (mode_vantay == 5){
+		if (mode_vantay == 6){
 			mode_vantay = 1;
 		}
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_1) == 0);
@@ -424,6 +745,12 @@ void nutnhan()
 		lcd_send_string("|  XOA TOAN BO   ");
 		lcd_put_cur(1, 0);
 		lcd_send_string("|>  DIEM DANH    ");
+	}
+	else if (mode_vantay == 5){
+		lcd_put_cur(0, 0);
+		lcd_send_string("|   DIEM DANH    ");
+		lcd_put_cur(1, 0);
+		lcd_send_string("|>  NHAP TEN     ");
 	}
 	/*else 
 	{

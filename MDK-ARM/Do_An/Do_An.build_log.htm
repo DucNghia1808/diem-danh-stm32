@@ -22,16 +22,35 @@ Dialog DLL:      TCM.DLL V1.53.0.0
  
 <h2>Project:</h2>
 E:\Do_An\Code_STM\Do_An\MDK-ARM\Do_An.uvprojx
-Project File Date:  10/09/2022
+Project File Date:  10/16/2022
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Do_An'
-compiling R305.c...
+compiling main.c...
+..\flash\flash.h(26): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Src/main.c(86): warning:  #1295-D: Deprecated declaration nutnhan - give arg types
+  void nutnhan();
+../Src/main.c(87): warning:  #1295-D: Deprecated declaration quetphim - give arg types
+  void quetphim();
+../Src/main.c(91): warning:  #1295-D: Deprecated declaration themvantay - give arg types
+  void themvantay();
+../Src/main.c(92): warning:  #1295-D: Deprecated declaration xoavantay - give arg types
+  void xoavantay();
+../Src/main.c(93): warning:  #1295-D: Deprecated declaration xoavantayall - give arg types
+  void xoavantayall();
+../Src/main.c(94): warning:  #1295-D: Deprecated declaration vantay - give arg types
+  void vantay();
+../Src/main.c(160): warning:  #223-D: function "MX_USART1_UART_Init" declared implicitly
+    MX_USART1_UART_Init();
+../Src/main.c(938): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  	HAL_UART_Transmit(&huart2, JSON, sizeof(JSON), 10); // gui 500ms 1 lan // ,10 timeout 
+../Src/main.c: 9 warnings, 0 errors
 linking...
-Program Size: Code=11248 RO-data=292 RW-data=44 ZI-data=1356  
+Program Size: Code=8736 RO-data=292 RW-data=60 ZI-data=1356  
 FromELF: creating hex file...
-"Do_An\Do_An.axf" - 0 Error(s), 0 Warning(s).
+"Do_An\Do_An.axf" - 0 Error(s), 9 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -54,7 +73,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.5.0
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>
