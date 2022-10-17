@@ -110,8 +110,8 @@ int value; // gia tri ascii cua ban phim
 int l = 1000; // sô lan vong lap for quet phim
 char msg[30];
 int delay_phim = 100;
-int col = 0;
-int	row = 1;
+int col = 1;
+int	row = 0;
 
 int mode_vantay = 0;// bien mode
 bool ok = false;
@@ -164,8 +164,8 @@ int main(void)
 	HAL_TIM_Base_Start_IT(&htim2);
 	// khoi tao LCD
   lcd_init();
-	lcd_put_cur(0, 0);
-	lcd_send_string("DO AN TOT NGHIEP");
+	/*lcd_put_cur(0, 0);
+	lcd_send_string("DO AN TOT NGHIEP");*/
 	// set keypad
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
@@ -174,7 +174,7 @@ int main(void)
 	
 	m = 0;
 	lcd_put_cur(0, 0);
-	lcd_send_string("     NHAP TEN     ");
+	lcd_send_string(">");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -639,27 +639,33 @@ void quetphim()
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
 	
 	/* KEY  * */
-	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0) // chon mode
+	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0) 
 	{
 		ok = false;
+		lcd_clear();
 		lcd_put_cur(0,0);
 		lcd_send_string(">>");
-		lcd_put_cur(0,3);
+		lcd_put_cur(0,2);
 		for(int a = 0; a<m; a++)
 		{
 			lcd_send_data(msg[a]);
 		}
 		HAL_Delay(3000);
-		lcd_clear();
 		for(int a = 0; a<30; a++)
 		{
 			msg[a] = 0;
 			m = 0; 
 		}
+		col = 0;
+		row = 0;
+		lcd_clear();
+		lcd_put_cur(row, col);
+		lcd_send_string(">");
+		col++;
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0);
 	}
 		/* KEY0 */
-	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0) // chon mode
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == 0)
 	{
 		value = 48; // so 1
 		HAL_Delay(10);
@@ -681,17 +687,30 @@ void quetphim()
 		col++;
 	}
 			/* KEY #   delete */
-	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0) // chon mode
+	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0) 
 	{
-		m--;
-		col--;
+		if(m != 0)
+			m--;
+		if (col == 0 && row == 1)
+		{
+			col = 16;
+			row = 0;
+		}
+		if (row == 0 && col == 1)
+		{}
+		else if (col >= 1)
+			col--;
 		lcd_put_cur(row, col);
 		lcd_send_string(" ");
 		lcd_put_cur(row, col);
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == 0);
 		HAL_Delay(delay_phim);
 	}	
-	if(col >= 15)col = 0;
+	if(col > 15)
+	{
+		col = 0;
+		row = 1;
+	}
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
 }
 

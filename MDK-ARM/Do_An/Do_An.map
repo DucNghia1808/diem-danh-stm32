@@ -358,9 +358,9 @@ Section Cross References
     main.o(i.main) refers to main.o(i.MX_TIM2_Init) for MX_TIM2_Init
     main.o(i.main) refers to stm32f1xx_hal_tim.o(i.HAL_TIM_Base_Start_IT) for HAL_TIM_Base_Start_IT
     main.o(i.main) refers to i2c-lcd.o(i.lcd_init) for lcd_init
+    main.o(i.main) refers to stm32f1xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
     main.o(i.main) refers to i2c-lcd.o(i.lcd_put_cur) for lcd_put_cur
     main.o(i.main) refers to i2c-lcd.o(i.lcd_send_string) for lcd_send_string
-    main.o(i.main) refers to stm32f1xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
     main.o(i.main) refers to main.o(i.quetphim) for quetphim
     main.o(i.main) refers to main.o(.bss) for .bss
     main.o(i.main) refers to main.o(.data) for .data
@@ -378,8 +378,8 @@ Section Cross References
     main.o(i.quetphim) refers to i2c-lcd.o(i.lcd_send_data) for lcd_send_data
     main.o(i.quetphim) refers to main.o(.bss) for .bss
     main.o(i.quetphim) refers to main.o(.data) for .data
-    main.o(i.quetphim) refers to i2c-lcd.o(i.lcd_send_string) for lcd_send_string
     main.o(i.quetphim) refers to i2c-lcd.o(i.lcd_clear) for lcd_clear
+    main.o(i.quetphim) refers to i2c-lcd.o(i.lcd_send_string) for lcd_send_string
     main.o(i.send_data_uart) refers to memseta.o(.text) for __aeabi_memclr4
     main.o(i.send_data_uart) refers to printfa.o(i.__0sprintf) for __2sprintf
     main.o(i.send_data_uart) refers to strcat.o(.text) for strcat
@@ -2008,9 +2008,9 @@ Image Symbol Table
     i.lcd_send_data                          0x08001bd0   Section        0  i2c-lcd.o(i.lcd_send_data)
     i.lcd_send_string                        0x08001c10   Section        0  i2c-lcd.o(i.lcd_send_string)
     i.main                                   0x08001c24   Section        0  main.o(i.main)
-    i.quetphim                               0x08001d18   Section        0  main.o(i.quetphim)
-    .constdata                               0x0800230c   Section       16  system_stm32f1xx.o(.constdata)
-    .constdata                               0x0800231c   Section        8  system_stm32f1xx.o(.constdata)
+    i.quetphim                               0x08001ce8   Section        0  main.o(i.quetphim)
+    .constdata                               0x08002320   Section       16  system_stm32f1xx.o(.constdata)
+    .constdata                               0x08002330   Section        8  system_stm32f1xx.o(.constdata)
     .data                                    0x20000000   Section       44  main.o(.data)
     .data                                    0x2000002c   Section       12  stm32f1xx_hal.o(.data)
     .data                                    0x20000038   Section        4  system_stm32f1xx.o(.data)
@@ -2204,12 +2204,12 @@ Image Symbol Table
     lcd_send_cmd                             0x08001b91   Thumb Code    58  i2c-lcd.o(i.lcd_send_cmd)
     lcd_send_data                            0x08001bd1   Thumb Code    58  i2c-lcd.o(i.lcd_send_data)
     lcd_send_string                          0x08001c11   Thumb Code    20  i2c-lcd.o(i.lcd_send_string)
-    main                                     0x08001c25   Thumb Code   178  main.o(i.main)
-    quetphim                                 0x08001d19   Thumb Code  1514  main.o(i.quetphim)
-    AHBPrescTable                            0x0800230c   Data          16  system_stm32f1xx.o(.constdata)
-    APBPrescTable                            0x0800231c   Data           8  system_stm32f1xx.o(.constdata)
-    Region$$Table$$Base                      0x08002324   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08002344   Number         0  anon$$obj.o(Region$$Table)
+    main                                     0x08001c25   Thumb Code   166  main.o(i.main)
+    quetphim                                 0x08001ce9   Thumb Code  1580  main.o(i.quetphim)
+    AHBPrescTable                            0x08002320   Data          16  system_stm32f1xx.o(.constdata)
+    APBPrescTable                            0x08002330   Data           8  system_stm32f1xx.o(.constdata)
+    Region$$Table$$Base                      0x08002338   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08002358   Number         0  anon$$obj.o(Region$$Table)
     ok                                       0x20000000   Data           1  main.o(.data)
     l                                        0x20000004   Data           4  main.o(.data)
     delay_phim                               0x20000008   Data           4  main.o(.data)
@@ -2241,9 +2241,9 @@ Memory Map of the image
 
   Image Entry point : 0x080000ed
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00002380, Max: 0x00010000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00002394, Max: 0x00010000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00002344, Max: 0x00010000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00002358, Max: 0x00010000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -2355,23 +2355,23 @@ Memory Map of the image
     0x08001b90   0x08001b90   0x00000040   Code   RO           16    i.lcd_send_cmd      i2c-lcd.o
     0x08001bd0   0x08001bd0   0x00000040   Code   RO           17    i.lcd_send_data     i2c-lcd.o
     0x08001c10   0x08001c10   0x00000014   Code   RO           18    i.lcd_send_string   i2c-lcd.o
-    0x08001c24   0x08001c24   0x000000f4   Code   RO         1005    i.main              main.o
-    0x08001d18   0x08001d18   0x000005f4   Code   RO         1007    i.quetphim          main.o
-    0x0800230c   0x0800230c   0x00000010   Data   RO         3801    .constdata          system_stm32f1xx.o
-    0x0800231c   0x0800231c   0x00000008   Data   RO         3802    .constdata          system_stm32f1xx.o
-    0x08002324   0x08002324   0x00000020   Data   RO         4227    Region$$Table       anon$$obj.o
+    0x08001c24   0x08001c24   0x000000c4   Code   RO         1005    i.main              main.o
+    0x08001ce8   0x08001ce8   0x00000638   Code   RO         1007    i.quetphim          main.o
+    0x08002320   0x08002320   0x00000010   Data   RO         3801    .constdata          system_stm32f1xx.o
+    0x08002330   0x08002330   0x00000008   Data   RO         3802    .constdata          system_stm32f1xx.o
+    0x08002338   0x08002338   0x00000020   Data   RO         4227    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08002344, Size: 0x00000588, Max: 0x00005000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08002358, Size: 0x00000588, Max: 0x00005000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08002344   0x0000002c   Data   RW         1023    .data               main.o
-    0x2000002c   0x08002370   0x0000000c   Data   RW         2931    .data               stm32f1xx_hal.o
-    0x20000038   0x0800237c   0x00000004   Data   RW         3803    .data               system_stm32f1xx.o
+    0x20000000   0x08002358   0x0000002c   Data   RW         1023    .data               main.o
+    0x2000002c   0x08002384   0x0000000c   Data   RW         2931    .data               stm32f1xx_hal.o
+    0x20000038   0x08002390   0x00000004   Data   RW         3803    .data               system_stm32f1xx.o
     0x2000003c        -       0x00000054   Zero   RW          788    .bss                r305.o
     0x20000090        -       0x000000f2   Zero   RW         1013    .bss                main.o
-    0x20000182   0x08002380   0x00000006   PAD
+    0x20000182   0x08002394   0x00000006   PAD
     0x20000188        -       0x00000400   Zero   RW            1    STACK               startup_stm32f103xb.o
 
 
@@ -2383,7 +2383,7 @@ Image component sizes
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
        316         12          0          0          0     441262   i2c-lcd.o
-      2122        114          0         44        242       7650   main.o
+      2142         80          0         44        242       7718   main.o
         56          8          0          0         84       1205   r305.o
          0          0          0          0          0        447   ringbuf.o
         36          8        236          0       1024        776   startup_stm32f103xb.o
@@ -2401,7 +2401,7 @@ Image component sizes
         72         16         24          4          0       1075   system_stm32f1xx.o
 
     ----------------------------------------------------------------------
-      8610        456        292         60       1356     527244   Object Totals
+      8630        422        292         60       1356     527312   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         18          0          0          0          6          0   (incl. Padding)
 
@@ -2442,15 +2442,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      8736        472        292         60       1356     523516   Grand Totals
-      8736        472        292         60       1356     523516   ELF Image Totals
-      8736        472        292         60          0          0   ROM Totals
+      8756        438        292         60       1356     523584   Grand Totals
+      8756        438        292         60       1356     523584   ELF Image Totals
+      8756        438        292         60          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 9028 (   8.82kB)
+    Total RO  Size (Code + RO Data)                 9048 (   8.84kB)
     Total RW  Size (RW Data + ZI Data)              1416 (   1.38kB)
-    Total ROM Size (Code + RO Data + RW Data)       9088 (   8.88kB)
+    Total ROM Size (Code + RO Data + RW Data)       9108 (   8.89kB)
 
 ==============================================================================
 
