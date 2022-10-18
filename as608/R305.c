@@ -310,9 +310,6 @@ uint8_t fingerEnroll(uint8_t id)
 int fingerIDSearch(void)
 {
 	int8_t p = -1;
-	//lcd_clear();
-	//lcd_put_cur(0,0);
-	//lcd_send_string("MOI DAT TAY VAO");
 	
 	while(p != FINGERPRINT_OK)
 	{

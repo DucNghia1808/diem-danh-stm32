@@ -84,7 +84,7 @@ PUTCHAR_PROTOTYPE
 	return ch;
 }
 void nutnhan();
-void quetphim();
+void quetphim(char *ten);
 
 
 void send_data_uart(uint8_t Mode, uint8_t Admin, uint8_t Id, uint8_t Name);
@@ -93,6 +93,7 @@ void themvantay();
 void xoavantay();
 void xoavantayall();
 void vantay();
+void suavantay();
 
 /* USER CODE END PFP */
 
@@ -114,6 +115,8 @@ char msg[30];
 int delay_phim = 100;
 int col = 1;
 int	row = 0;
+bool name_ok = false;
+//char ten[30] = "";
 
 int mode_vantay = 0;// bien mode
 bool ok = false;
@@ -178,6 +181,7 @@ int main(void)
 	
 	m = 0;
 	lcd_put_cur(0, 0);
+	char ten[30]="";
 	//lcd_send_string(">");
   /* USER CODE END 2 */
 
@@ -188,7 +192,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		nutnhan();
+		/*nutnhan();
 		if (mode_vantay == 1 && ok == true){
 			themvantay();
 		}
@@ -202,15 +206,15 @@ int main(void)
 			vantay();
 		}
 		else if (mode_vantay == 5 && ok == true){
-				lcd_clear();
-				lcd_put_cur(0, 0);
-				lcd_send_string(">");
+			lcd_clear();
+			lcd_put_cur(0, 0);
+			lcd_send_string(">");
 			while (ok == true)
 			{
-				quetphim();
+				//quetphim();
 			}
-		}
-		//quetphim();
+		}*/
+		quetphim(ten);
   /* USER CODE END 3 */
 }
 }
@@ -411,7 +415,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void quetphim()
+void quetphim(char * ten)
 {
 	 /*
 		A4-A7 -> output  // moi dau set 1 het
@@ -644,21 +648,23 @@ void quetphim()
 	if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0) 
 	{
 		ok = false;
+		name_ok = true; // nhap ten xong
 		lcd_clear();
 		lcd_put_cur(0,0);
 		lcd_send_string(">>");
 		lcd_put_cur(0,2);
-		char ten[30] = "";
+
 		for(int a = 0; a<m; a++)
 		{
 			lcd_send_data(msg[a]);
 			ten[a]+=msg[a];
 		}
-		send_data_uart1(mode_vantay, Admin, Id, ten);
-		HAL_Delay(3000);
+		/* NHAP TEN OK THI NHAP THEM VAN TAY*/
+		HAL_Delay(1000);
+
 		for(int a = 0; a<30; a++)  // clear name buffer
 		{
-			msg[a] = 0;
+			msg[a] = 0; // clear mess
 			m = 0; 
 		}
 		col = 0;
@@ -776,15 +782,12 @@ void nutnhan()
 		lcd_put_cur(1, 0);
 		lcd_send_string("|>  NHAP TEN     ");
 	}
-	/*else 
-	{
-		//lcd_clear();
-		lcd_put_cur(0, 0);
-		lcd_send_string("MAN HINH CHINH");
-	}*/
 }
 
+void suavantay()
+{
 
+}
 void vantay()
 {	
 		if(verifyPassword() == 1 )
@@ -829,112 +832,197 @@ void vantay()
 		}
 }
 void themvantay()
-{		
-		lcd_clear();
-		lcd_put_cur(0, 0);
-		lcd_send_string("  THEM VAN TAY  ");
+{	
+	lcd_clear();
+	lcd_put_cur(0, 0);
+	lcd_send_string("  XAC NHAN ADMIN  ");	
+	if(verifyPassword() == 1 ) // xac nhan admin
+	{
+		IDE = fingerIDSearch();
+		if (IDE == 0) // bang 0: ADMIN
+		{
+			lcd_clear();
+			lcd_put_cur(0, 0);
+			lcd_send_string("  THEM VAN TAY  ");
+			HAL_Delay(1000);
+			lcd_clear();
+			/*DOC BAN PHIM NHAP VAO TEN */
+			lcd_put_cur(0, 0);
+			lcd_send_string(">");
+			name_ok = false;
+			char ten[30] = "";
+			bool chay_van_tay = false;
+			while (name_ok == false)// nhap cho xong ten
+			{
+				quetphim(ten);
+				if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == 0) // thoat nhap ten
+				{	
+					HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+					name_ok = true;
+					chay_van_tay = true;
+				}
+			}
+			if (chay_van_tay == false) // neu khong nhap ten thi khog nhap van tay
+			{
+				if(verifyPassword() == 1 )
+				{	
+					int	v = fingerIDSearch(); // tim xem co van tay khong
+					if (v == -1)
+					{ // neu co van tay roi
+						IDE = Flash_Read_Int(ADDRESS_DATA_STORAGE);
+						int x = fingerEnroll(IDE);
+						if ( x == 99)
+						{
+							ok = false;
+						}
+						else if (x == 0)
+						{
+							lcd_put_cur(1,1);
+							lcd_send_string("       LOI      ");
+							HAL_Delay(1000);
+						}
+						else if(x == 1 )// XÁC NHAN NHAP DUNG VAN TAY HAI LAN
+						{
+							//lcd_clear();
+							lcd_put_cur(1,1);
+							lcd_send_string("THEM OK ID: ");
+							lcd_send_data(IDE/10 + 0x30);
+							lcd_send_data(IDE%10 + 0x30);
+							/*send name, IDE, Mode den serial*/
+							send_data_uart1(mode_vantay, Admin, IDE, ten);
+							HAL_Delay(1000);
+							IDE++;
+							Flash_Erase(ADDRESS_DATA_STORAGE);
+							Flash_Write_Int(ADDRESS_DATA_STORAGE,IDE);
 		
-		if(verifyPassword() == 1 )
-		{	
-			int	v = fingerIDSearch(); // tim xem co van tay khong
-			if (v == -1){ // neu co van tay roi
-				IDE = Flash_Read_Int(ADDRESS_DATA_STORAGE);
-				int x = fingerEnroll(IDE);
-				if ( x == 99)
-				{
-					ok = false;
+						}
+						ok = false;
+					}
+					else if (v == 999){
+						ok = false;
+					}
+					else {
+						lcd_put_cur(1,1);
+						lcd_send_string("  DA TON TAI ");
+						HAL_Delay(1000);
+					}
 				}
-				else if (x == 0)
-				{
-					lcd_put_cur(1,1);
-					lcd_send_string("       LOI      ");
-					HAL_Delay(1000);
-				}
-				else if(x == 1 )// XÁC NHAN NHAP DUNG VAN TAY HAI LAN
-				{
-					//lcd_clear();
-					lcd_put_cur(1,1);
-					lcd_send_string("THEM OK ID: ");
-					lcd_send_data(IDE/10 + 0x30);
-					lcd_send_data(IDE%10 + 0x30);
-					HAL_Delay(1000);
+			}
 					
-				}
-				/*else 
-				{
-					lcd_put_cur(1,1);
-					lcd_send_string("  DA TON TAI  ");
-					HAL_Delay(1000);
-				}*/
-				IDE++;
-				Flash_Erase(ADDRESS_DATA_STORAGE);
-				Flash_Write_Int(ADDRESS_DATA_STORAGE,IDE);
-				ok = false;
-			}
-			else if (v == 999){
-				ok = false;
-			}
-			else {
-				lcd_put_cur(1,1);
-				lcd_send_string("  DA TON TAI ");
-				HAL_Delay(1000);
-				//ok = false;
-			}
-	}
-
 		lcd_clear();
+		}
+		else if (IDE == 999)
+		{
+			ok = false;
+		}
+		else 
+		{
+			lcd_clear();
+			lcd_put_cur(0, 0);
+			lcd_send_string("      SAI ADMIN     ");	
+			HAL_Delay(2000);
+		}
+	}
 }
 void xoavantay()
 {
-	if(verifyPassword() == 1 )
-	{	
-		lcd_clear();
-		lcd_put_cur(0, 0);
-		lcd_send_string("   XOA VAN TAY  ");
-		lcd_put_cur(1,0);
-		lcd_send_string("MOI DAT TAY VAO");
-		y = fingerIDSearch();
-		if (y == 999)
+	lcd_clear();
+	lcd_put_cur(0, 0);
+	lcd_send_string("  XAC NHAN ADMIN  ");	
+	if(verifyPassword() == 1 ) // xac nhan admin
+	{
+		IDE = fingerIDSearch();
+		if (IDE == 0) // bang 0: ADMIN
 		{
-			// thoat khoi xoa van tay
+			HAL_Delay(1000);
+			if(verifyPassword() == 1 )
+			{	
+				lcd_clear();
+				lcd_put_cur(0, 0);
+				lcd_send_string("   XOA VAN TAY  ");
+				lcd_put_cur(1,0);
+				lcd_send_string("MOI DAT TAY VAO");
+				HAL_Delay(1000);
+				y = fingerIDSearch();
+				if (y == 999)
+				{
+					// thoat khoi xoa van tay
+				}
+				else if (y == 0)
+				{
+					lcd_put_cur(0,0);
+					lcd_send_string("   KHONG THE   ");
+					lcd_put_cur(1,0);
+					lcd_send_string("XOA VAN TAY ADMIN");
+					HAL_Delay(1000);
+				}
+				else if (y != -1) // co van tay thi xoa
+				{
+					deleteModel(y);
+					lcd_put_cur(1,0);
+					lcd_send_string("  DA XOA  ");
+					lcd_put_cur(1,8);
+					lcd_send_string("  ID: ");
+					lcd_send_data(y/10 + 0x30);
+					lcd_send_data(y%10 + 0x30);
+					HAL_Delay(1000);
+				}
+				else { // khong co van tay
+					lcd_put_cur(0,0);
+					lcd_send_string("  VAN TAY SAI  ");
+					lcd_put_cur(1,0);
+					lcd_send_string("XIN HAY THU LAI");
+					HAL_Delay(1000);
+				}
+				lcd_clear ();
+				ok = false;
+			}
 		}
-		else if (y != -1) // co van tay thi xoa
+		else if (IDE == 999)
 		{
-			deleteModel(y);
-			lcd_put_cur(1,0);
-			lcd_send_string("  DA XOA  ");
-			lcd_put_cur(1,8);
-			lcd_send_string("  ID: ");
-			lcd_send_data(y/10 + 0x30);
-			lcd_send_data(y%10 + 0x30);
-			HAL_Delay(1000);
+			ok = false;
 		}
-		else { // khong co van tay
-			lcd_put_cur(0,0);
-			lcd_send_string("  VAN TAY SAI  ");
-			lcd_put_cur(1,0);
-			lcd_send_string("XIN HAY THU LAI");
-			HAL_Delay(1000);
+		else 
+		{
+			lcd_clear();
+			lcd_put_cur(0, 0);
+			lcd_send_string("    SAI ADMIN   ");	
+			HAL_Delay(2000);
 		}
-		lcd_clear ();
-		ok = false;
 	}
 }
 
 void xoavantayall()
 {
-	if(verifyPassword() == 1 )
+	lcd_clear();
+	lcd_put_cur(0, 0);
+	lcd_send_string("  XAC NHAN ADMIN  ");	
+	if(verifyPassword() == 1 ) // xac nhan admin
 	{
-		emptyDatabase();
-		lcd_clear();
-		lcd_put_cur(1,1);
-		lcd_send_string("      DA XOA     ");
-		HAL_Delay(1000);
-		lcd_clear ();
-		ok = false;
-		IDE=0;
-		Flash_Erase(ADDRESS_DATA_STORAGE);
-		Flash_Write_Int(ADDRESS_DATA_STORAGE,0);
+		IDE = fingerIDSearch();
+		if (IDE == 0) // bang 0: ADMIN
+		{
+			if(verifyPassword() == 1 )
+			{
+				emptyDatabase();
+				lcd_clear();
+				lcd_put_cur(1,1);
+				lcd_send_string("     DA XOA     ");
+				HAL_Delay(1000);
+				lcd_clear ();
+				ok = false;
+				IDE=0;
+				Flash_Erase(ADDRESS_DATA_STORAGE);
+				Flash_Write_Int(ADDRESS_DATA_STORAGE,0);
+			}
+		}
+	  else 
+		{
+			lcd_clear();
+			lcd_put_cur(0, 0);
+			lcd_send_string("    SAI ADMIN   ");	
+			HAL_Delay(2000);
+		}
 	}
 }
 void send_data_uart(uint8_t Mode, uint8_t Admin, uint8_t Id, uint8_t Name)
@@ -963,7 +1051,7 @@ void send_data_uart(uint8_t Mode, uint8_t Admin, uint8_t Id, uint8_t Name)
 }
 void send_data_uart1(uint8_t Mode, uint8_t Admin, uint8_t Id, char * Name)
 {
-	char JSON[40] = "";
+	char JSON[80] = "";
 	char Str_Mode[2] = ""; 
 	char Str_Admin[2] = "";
 	char Str_Id[2] = "";
