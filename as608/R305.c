@@ -1,6 +1,6 @@
 #include "R305.h"
 #include <stdio.h>
-#include "i2c-lcd.h"
+#include "LCD_I2C.h"
 #include "main.h"
 
 uint16_t fingerID, confidence;
@@ -232,12 +232,14 @@ int8_t fingerFastSearch(void)
 uint8_t fingerEnroll(uint8_t id)
 {
 	int8_t p = -1;
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
 	while (p != FINGERPRINT_OK)
 	{
     p = getImage();
 		if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == 0) // thoat khoi seach van tay
 		{	
 			HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
 			return 99;
 		}
 	}
@@ -245,33 +247,37 @@ uint8_t fingerEnroll(uint8_t id)
 	p = image2Tz(1);
 	if(p != FINGERPRINT_OK) // luu vao buffer loi
 	{ 
-		//lcd_clear();
-		lcd_put_cur(1,0);
-		lcd_send_string("    LOI TAO KI TU     ");
+		//LCD_Clear();
+		LCD_setCursor(2,0);
+		LCD_sendString("  LOI TAO KI TU  ");
 		return 0;
 	}
-	lcd_put_cur(1,0);
-	lcd_send_string(" DANG CAPTURED   ");
+	LCD_setCursor(3,0);
+	LCD_sendString("    DANG CAPTURED  ");
 	HAL_Delay(1000);
 	p = -1;
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
 	while (p != FINGERPRINT_NOFINGER)
 	{
    		p = getImage();
 			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == 0) // thoat khoi seach van tay
 			{	
 				HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
 				return 99;
 			}
   	}
-	lcd_put_cur(1,0);
-	lcd_send_string("    LUU LAN 1    ");
+	LCD_setCursor(3,0);
+	LCD_sendString("      LUU LAN 1    ");
 
 	p = -1;
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
 	while (p != FINGERPRINT_OK) {
     p = getImage();
 		if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == 0) // thoat khoi seach van tay
 			{	
 				HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
 				return 99;
 			}
 	}
@@ -279,16 +285,16 @@ uint8_t fingerEnroll(uint8_t id)
 	p = image2Tz(2);
 	if(p != FINGERPRINT_OK)
 	{
-		lcd_put_cur(1,0);
-		lcd_send_string("    LOI   ");
+		LCD_setCursor(3,0);
+		LCD_sendString("    LOI KHI THEM   ");
 		return 0;
 	}
 	
 	p = createModel();
 	if(p != FINGERPRINT_OK)
 	{
-		lcd_put_cur(1,0);
-		lcd_send_string("  LOI KHI TAO MAU ");
+		LCD_setCursor(3,0);
+		LCD_sendString("  LOI KHI TAO MAU ");
 		return 0;
 	}
 	
@@ -300,9 +306,9 @@ uint8_t fingerEnroll(uint8_t id)
 	}
 	else
 	{
-		//lcd_clear();
-		lcd_put_cur(1,0);
-		lcd_send_string("    FAILED     ");
+		//LCD_Clear();
+		LCD_setCursor(3,0);
+		LCD_sendString("    THEM THAT BAI  ");
 		return 0;
 	}
 }
@@ -310,13 +316,14 @@ uint8_t fingerEnroll(uint8_t id)
 int fingerIDSearch(void)
 {
 	int8_t p = -1;
-	
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
 	while(p != FINGERPRINT_OK)
 	{
 		p = getImage();
 		if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == 0) // thoat khoi seach van tay
 		{	
 			HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
 			return 999;
 		}
 	}
@@ -324,9 +331,9 @@ int fingerIDSearch(void)
   p = image2Tz(1);
   if (p != FINGERPRINT_OK)
 	{
-		lcd_clear();
-		lcd_put_cur(1,0);
-		lcd_send_string("LOI TAO KI TU");
+		LCD_Clear();
+		LCD_setCursor(3,0);
+		LCD_sendString("    LOI TAO KI TU  ");
 		return -1;
 	}	
 	//HAL_Delay(1000);
@@ -335,11 +342,11 @@ int fingerIDSearch(void)
 	p = fingerFastSearch();
   if (p != FINGERPRINT_OK)
 	{
-		/*lcd_clear();
-		lcd_put_cur(0,0);
-		lcd_send_string("  VAN TAY SAI  ");
-		lcd_put_cur(1,0);
-		lcd_send_string("XIN HAY THU LAI");
+		/*LCD_Clear();
+		LCD_setCursor(0,0);
+		LCD_sendString("  VAN TAY SAI  ");
+		LCD_setCursor(1,0);
+		LCD_sendString("XIN HAY THU LAI");
 		HAL_Delay(1000);*/
 		return -1;
 	}

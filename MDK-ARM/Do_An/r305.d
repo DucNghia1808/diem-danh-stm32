@@ -28,4 +28,4 @@ do_an\r305.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
 do_an\r305.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
 do_an\r305.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 do_an\r305.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
-do_an\r305.o: ..\I2C\i2c-lcd.h
+do_an\r305.o: ..\LCD\LCD_I2C.h

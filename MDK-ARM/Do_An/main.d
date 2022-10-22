@@ -30,9 +30,9 @@ do_an\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 do_an\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 do_an\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 do_an\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
-do_an\main.o: ..\I2C\i2c-lcd.h
 do_an\main.o: ..\jSON\cJSON.h
 do_an\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 do_an\main.o: ..\as608\R305.h
 do_an\main.o: ..\flash\flash.h
 do_an\main.o: ..\ring_buf\ringbuf.h
+do_an\main.o: ..\LCD\LCD_I2C.h
