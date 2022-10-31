@@ -122,13 +122,18 @@ int col = 1;
 int	row = 1;
 bool name_ok = false;
 
+
 //char ten[30] = "";
 
 int mode_vantay = 0;// bien mode
 bool ok = false;
+bool phai_them_vantay_ad = false;
+bool chuathemvantayduoc = false;
+char tentuPC[50];
 
 uint8_t idxoa;
 uint8_t buf4[25];
+
 uint8_t rx_data;
 char rx_buffer[50];
 unsigned int rx_index = 0;
@@ -139,13 +144,8 @@ cJSON *str_json;
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) // call back uart interrupt
 {
 	if (huart -> Instance == USART2){
-		//Received();// nhan + xu ly data
-		//HAL_UART_Receive_IT(&huart2, &rx_data, 1);  // nhan data uart interrupt/ 1: data size
-		// uart, data, size
-		LCD_setCursor(1,0);
-		LCD_sendString("da vao ham ngat uart");
-		HAL_Delay(2000);
-		//HAL_UART_Receive_IT(&huart2, &rx_data, 1);  // nhan data uart interrupt/ 1: data size
+		Received();// nhan + xu ly data
+		HAL_UART_Receive_IT(&huart2, &rx_data, 1);  // nhan data uart interrupt/ 1: data size
 	}
 }
 
@@ -229,6 +229,8 @@ int main(void)
 			xoavantayall();
 		}
 		else if (mode_vantay == 4 && ok == true){
+			LCD_setCursor(0, 0);
+			LCD_sendString("DIEM DANH NHAN VIEN");
 			vantay();
 		}
 		else if (mode_vantay == 5 && ok == true){
@@ -241,8 +243,51 @@ int main(void)
 			}
 		}
 		else {
-			LCD_setCursor(0, 0);
-			LCD_sendString("  DO AN TOT NGHIEP  ");
+			if (mode_vantay == 1){
+				LCD_setCursor(1, 0);
+				LCD_sendString("|>  THEM VAN TAY   ");
+				LCD_setCursor(2, 0);
+				LCD_sendString("|    XOA VAN TAY   ");
+				LCD_setCursor(3, 0);
+				LCD_sendString("|    XOA TOAN BO   ");
+			}
+			else if (mode_vantay == 2){
+				LCD_setCursor(1, 0);
+				LCD_sendString("|   THEM VAN TAY   ");
+				LCD_setCursor(2, 0);
+				LCD_sendString("|>   XOA VAN TAY   ");
+				LCD_setCursor(3, 0);
+				LCD_sendString("|    XOA TOAN BO   ");
+			}
+			else if (mode_vantay == 3){
+				LCD_setCursor(1, 0);
+				LCD_sendString("|   THEM VAN TAY   ");
+				LCD_setCursor(2, 0);
+				LCD_sendString("|    XOA VAN TAY   ");
+				LCD_setCursor(3, 0);
+				LCD_sendString("|>   XOA TOAN BO   ");
+			}
+			else if (mode_vantay == 4){
+				LCD_setCursor(1, 0);
+				LCD_sendString("|    XOA VAN TAY   ");
+				LCD_setCursor(2, 0);
+				LCD_sendString("|    XOA TOAN BO   ");
+				LCD_setCursor(3, 0);
+				LCD_sendString("|>    DIEM DANH    ");
+			}
+			else if (mode_vantay == 5){	
+				LCD_setCursor(1, 0);
+				LCD_sendString("|    XOA TOAN BO   ");
+				LCD_setCursor(2, 0);
+				LCD_sendString("|     DIEM DANH    ");
+				LCD_setCursor(3, 0);
+				LCD_sendString("|>    NHAP TEN     ");
+			}
+			else 
+			{
+				LCD_setCursor(0, 0);
+				LCD_sendString("  DO AN TOT NGHIEP  ");
+			}
 		}
   /* USER CODE END 3 */
 }
@@ -458,7 +503,7 @@ void quetphim(char * ten)
 	{
 		value = 49; // so 1
 		HAL_Delay(10);
-		LCD_setCursor(1,0);
+		LCD_setCursor(2,0);
 		msg[m] = value;
 		LCD_sendString(msg);
 		value--;
@@ -479,7 +524,7 @@ void quetphim(char * ten)
 		{
 			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == 0)
 			{
-				LCD_setCursor(1,0);
+				LCD_setCursor(2,0);
 				msg[m] = value;
 				LCD_sendString(msg);
 				value++;
@@ -505,7 +550,7 @@ void quetphim(char * ten)
 		{
 			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_1) == 0)
 			{
-				LCD_setCursor(1,0);
+				LCD_setCursor(2,0);
 				msg[m] = value;
 				LCD_sendString(msg);
 				value++;
@@ -533,7 +578,7 @@ void quetphim(char * ten)
 		{
 			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0)
 			{
-				LCD_setCursor(1,0);
+				LCD_setCursor(2,0);
 				msg[m] = value;
 				LCD_sendString(msg);
 				value++;
@@ -558,7 +603,7 @@ void quetphim(char * ten)
 		{
 			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == 0)
 			{
-				LCD_setCursor(1,0);
+				LCD_setCursor(2,0);
 				msg[m] = value;
 				LCD_sendString(msg);
 				value++;
@@ -583,7 +628,7 @@ void quetphim(char * ten)
 		{
 			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_1) == 0)
 			{
-				LCD_setCursor(1,0);
+				LCD_setCursor(2,0);
 				msg[m] = value;
 				LCD_sendString(msg);
 				value++;
@@ -613,7 +658,7 @@ void quetphim(char * ten)
 		{
 			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == 0)
 			{
-				LCD_setCursor(1,0);
+				LCD_setCursor(2,0);
 				msg[m] = value;
 				LCD_sendString(msg);	
 				value++;
@@ -638,7 +683,7 @@ void quetphim(char * ten)
 		{
 			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == 0)
 			{
-				LCD_setCursor(1,0);
+				LCD_setCursor(2,0);
 				msg[m] = value;
 				LCD_sendString(msg);		
 				value++;
@@ -663,7 +708,7 @@ void quetphim(char * ten)
 		{
 			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_1) == 0)
 			{
-				LCD_setCursor(1,0);
+				LCD_setCursor(2,0);
 				msg[m] = value;
 				LCD_sendString(msg);			
 				value++;
@@ -694,8 +739,8 @@ void quetphim(char * ten)
 		LCD_CMD(0x0C);
 		LCD_Clear();
 		LCD_setCursor(0, 0);
-		LCD_sendString("  DO AN TOT NGHIEP  ");
-		LCD_setCursor(1, 0);
+		LCD_sendString("   THEM VAN TAY   ");
+		LCD_setCursor(2, 0);
 	}
 		/* KEY0 */
 	
@@ -707,7 +752,7 @@ void quetphim(char * ten)
 		{
 			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == 0)
 			{
-				LCD_setCursor(1,0);
+				LCD_setCursor(2,0);
 				msg[m] = value;
 				LCD_sendString(msg);		
 				value = value - 16;
@@ -731,9 +776,11 @@ void quetphim(char * ten)
 		msg[m] = 0;
 		LCD_Write(msg[m]);
 		LCD_Clear();
-		LCD_setCursor(0, 0);
-		LCD_sendString("  DO AN TOT NGHIEP  ");
 		LCD_setCursor(1, 0);
+		LCD_sendString("   NHAP VAO TEN  ");
+		LCD_setCursor(0, 0);
+		LCD_sendString("   THEM VAN TAY   ");
+		LCD_setCursor(2, 0);
 		for(int t=0; t<m; t++){
 				LCD_Write(msg[t]);
 		}
@@ -757,8 +804,8 @@ void quetphim(char * ten)
 		LCD_CMD(0x0C);
 		LCD_Clear();
 		LCD_setCursor(0, 0);
-		LCD_sendString("  DO AN TOT NGHIEP  ");
-		LCD_setCursor(1, 0);
+		LCD_sendString("   THEM VAN TAY   ");
+		LCD_setCursor(2, 0);
 	}
 			/* KEY #   delete */
 	else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_1) == 0) 
@@ -770,9 +817,11 @@ void quetphim(char * ten)
 		msg[m] = 0;
 		LCD_Write(msg[m]);
 		LCD_Clear();
-		LCD_setCursor(0, 0);
-		LCD_sendString("  DO AN TOT NGHIEP  ");
 		LCD_setCursor(1, 0);
+		LCD_sendString("   NHAP VAO TEN  ");
+		LCD_setCursor(0, 0);
+		LCD_sendString("   THEM VAN TAY   ");
+		LCD_setCursor(2, 0);
 		for(int t=0; t<m; t++){
 				LCD_Write(msg[t]);
 		}
@@ -840,52 +889,7 @@ void quetphimcontrol()
 	}
 	
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
-	
-	if (mode_vantay == 1){
-		LCD_setCursor(1, 0);
-		LCD_sendString("|>  THEM VAN TAY   ");
-		LCD_setCursor(2, 0);
-		LCD_sendString("|    XOA VAN TAY   ");
-		LCD_setCursor(3, 0);
-		LCD_sendString("|    XOA TOAN BO   ");
-	}
-	else if (mode_vantay == 2){
-		LCD_setCursor(1, 0);
-		LCD_sendString("|   THEM VAN TAY   ");
-		LCD_setCursor(2, 0);
-		LCD_sendString("|>   XOA VAN TAY   ");
-		LCD_setCursor(3, 0);
-		LCD_sendString("|    XOA TOAN BO   ");
-	}
-	else if (mode_vantay == 3){
-		LCD_setCursor(1, 0);
-		LCD_sendString("|   THEM VAN TAY   ");
-		LCD_setCursor(2, 0);
-		LCD_sendString("|    XOA VAN TAY   ");
-		LCD_setCursor(3, 0);
-		LCD_sendString("|>   XOA TOAN BO   ");
-	}
-	else if (mode_vantay == 4){
-		LCD_setCursor(1, 0);
-		LCD_sendString("|    XOA VAN TAY   ");
-		LCD_setCursor(2, 0);
-		LCD_sendString("|    XOA TOAN BO   ");
-		LCD_setCursor(3, 0);
-		LCD_sendString("|>    DIEM DANH    ");
-	}
-	else if (mode_vantay == 5){	
-		LCD_setCursor(1, 0);
-		LCD_sendString("|    XOA TOAN BO   ");
-		LCD_setCursor(2, 0);
-		LCD_sendString("|     DIEM DANH    ");
-		LCD_setCursor(3, 0);
-		LCD_sendString("|>    NHAP TEN     ");
-	}
-	else 
-	{
-		LCD_setCursor(0, 0);
-		LCD_sendString("  DO AN TOT NGHIEP  ");
-	}
+
 }
 
 void suavantay()
@@ -901,12 +905,23 @@ void xulyJSON(char *dataJson)
 	{
 
 	}
-	else
+	else  // la chuoi JSON
 	{
-		if (cJSON_GetObjectItem(str_json, "Xoa"))
+		if (cJSON_GetObjectItem(str_json, "Xoa")) /// xoa ID
 		{
 			idxoa = atoi(cJSON_GetObjectItem(str_json, "Xoa")->valuestring); // atoi convert string to interger		
 			xoavantaytuPC(idxoa); // xoa id van tay
+		}
+		if (cJSON_GetObjectItem(str_json, "OK")) /// xoa ID
+		{
+			chuathemvantayduoc = true;
+		}
+		if (cJSON_GetObjectItem(str_json, "NAME")) /// xoa ID
+		{	
+			LCD_setCursor(2,0);
+			LCD_sendString("  XIN CAM ON");
+			LCD_setCursor(3,8);
+			LCD_sendString(cJSON_GetObjectItem(str_json, "NAME")->valuestring);
 		}
 	}
 	cJSON_Delete(str_json); // x�a m?ng json
@@ -920,11 +935,8 @@ void Received(void)
 	else 
 	{
 		xulyJSON(rx_buffer);
-		LCD_setCursor(3,0);
-		LCD_sendString(rx_buffer);
-		HAL_Delay(1000);
-		rx_index = 0;
-		
+		//printf("Data: %s\n",rx_buffer );
+		rx_index = 0;	
 		for (int i = 0; i < 50; i++)
 		{
 			rx_buffer[i] = 0;
@@ -933,14 +945,16 @@ void Received(void)
 }
 
 void xoavantaytuPC(int id)
-{
-		deleteModel(id);
-		LCD_setCursor(2,0);
-		LCD_sendString("  DA XOA");
-		LCD_setCursor(2,8);
-		LCD_sendString(" ID: ");
-		LCD_Write(id/10 + 0x30);
-		LCD_Write(id%10 + 0x30);
+{		if(id != 0){
+			deleteModel(id);
+			LCD_setCursor(3,0);
+			LCD_sendString("  DA XOA");
+			LCD_setCursor(3,8);
+			LCD_sendString(" ID: ");
+			LCD_Write(id/10 + 0x30);
+			LCD_Write(id%10 + 0x30);
+			send_data_uart1(2,3,id, "");
+		}
 }
 void vantay()
 {		
@@ -950,6 +964,12 @@ void vantay()
 			if(IDE == -1)
 			{
 				//HAL_Delay(1000);
+					LCD_setCursor(1, 0);
+					LCD_sendString("    VAN TAY SAI   ");
+					LCD_setCursor(2, 0);
+					LCD_sendString("  XIN HAY THU LAI  ");
+					HAL_Delay(2000);
+					LCD_Clear();
 			}
 			else if (IDE == 999) // thoat mode diem danh
 			{
@@ -957,135 +977,200 @@ void vantay()
 			}
 			else   //////// doc thu cong // truy xuat sql
 			{
-				if(IDE == 0 )
-				{
-					LCD_setCursor(1, 0);
-					LCD_sendString("      DIEM DANH    ");
-					LCD_setCursor(2, 0);
-					LCD_sendString("     FOUND ADMIN   ");
-					HAL_Delay(2000);
-				}
-
-				if(IDE == 1)
-				{
-					LCD_setCursor(1, 0);
-					LCD_sendString("      DIEM DANH    ");
-					LCD_setCursor(2, 0);
-					LCD_sendString("     FOUND NGHIA   ");
-					HAL_Delay(2000);
-				}
-				if(IDE==3)
-				{
-					LCD_setCursor(1, 0);
-					LCD_sendString("      DIEM DANH    ");
-					LCD_setCursor(2, 0);
-					LCD_sendString("     FOUND MINH    ");
-					HAL_Delay(2000);
-				}
+				send_data_uart1(3,1 , IDE, ""); // gui ID truy
+				HAL_Delay(2000);
+				LCD_Clear();
 			}
 		}
 }
 void themvantay()
 {	
-	LCD_Clear();
-	LCD_setCursor(0, 0);
-	LCD_sendString("   XAC NHAN ADMIN  ");	
-	if(verifyPassword() == 1 ) // xac nhan admin
-	{
-		IDE = fingerIDSearch();
-		if (IDE == 0) // bang 0: ADMIN
+	chuathemvantayduoc = false;
+	if(phai_them_vantay_ad == false){
+		LCD_Clear();
+		LCD_setCursor(0, 0);
+		LCD_sendString("   XAC NHAN ADMIN  ");	
+		if(verifyPassword() == 1 ) // xac nhan admin
 		{
-			LCD_Clear();
-			LCD_setCursor(0, 0);
-			LCD_sendString("    THEM VAN TAY   ");
-			HAL_Delay(1000);
-			LCD_Clear();
-			/*DOC BAN PHIM NHAP VAO TEN */
-			LCD_setCursor(0, 0);
-			LCD_sendString("  DO AN TOT NGHIEP  ");
-			LCD_setCursor(1, 0);
-			LCD_sendString(">");
-			name_ok = false;
-			char ten[30] = "";
-			bool chay_van_tay = false;
-			while (name_ok == false)// nhap cho xong ten
+			IDE = fingerIDSearch();
+			if (IDE == 0) // bang 0: ADMIN
 			{
-				quetphim(ten);
-				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
-				if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == 0) // thoat nhap ten
-				{	
-					HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-					name_ok = true; // add ten van tay
-					chay_van_tay = true;  // chay add van tay cam bien
-					ok = false; // thoat
+				LCD_Clear();
+				LCD_setCursor(0, 0);
+				LCD_sendString("    THEM VAN TAY   ");
+				/*DOC BAN PHIM NHAP VAO TEN */
+				LCD_setCursor(1, 0);
+				LCD_sendString("   NHAP VAO TEN  ");
+				LCD_setCursor(2, 0);
+				LCD_sendString(">");
+				name_ok = false;
+				char ten[30] = "";
+				bool chay_van_tay = false;
+				while (name_ok == false)// nhap cho xong ten
+				{
+					quetphim(ten);
+					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
+					if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == 0) // thoat nhap ten
+					{	
+						HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+						name_ok = true; // add ten van tay
+						chay_van_tay = true;  // chay add van tay cam bien
+						ok = false; // thoat
+					}
+					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
 				}
-				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
-			}
-			if (chay_van_tay == false) // neu khong nhap ten thi khog nhap van tay
-			{
-				if(verifyPassword() == 1 )
+				if (chay_van_tay == false) // neu khong nhap ten thi khog nhap van tay
 				{	
-					int	v = fingerIDSearch(); // tim xem co van tay khong
-					if (v == -1)
-					{ // neu co van tay roi
-						IDE = Flash_Read_Int(ADDRESS_DATA_STORAGE);
-						int x = fingerEnroll(IDE);
-						if ( x == 99)
-						{
+					LCD_setCursor(1, 0);
+					LCD_sendString("  NHAP VAO VAN TAY  ");
+					if(verifyPassword() == 1 )
+					{	
+						int	v = fingerIDSearch(); // tim xem co van tay khong
+						if (v == -1)
+						{ // neu co van tay roi
+							IDE = Flash_Read_Int(ADDRESS_DATA_STORAGE);
+							int x = fingerEnroll(IDE);
+							if ( x == 99)
+							{
+								ok = false;
+							}
+							else if (x == 0)
+							{
+								LCD_setCursor(3,0);
+								LCD_sendString("     LOI KHI THEM   ");
+								HAL_Delay(1000);
+							}
+							else if(x == 1 )// X�C NHAN NHAP DUNG VAN TAY HAI LAN
+							{
+
+								/*send name, IDE, Mode den serial*/
+										send_data_uart1(1, Admin, IDE, msg);
+																	//LCD_Clear();
+										LCD_setCursor(3,1);
+										LCD_sendString("  THEM OK ID: ");
+										LCD_Write(IDE/10 + 0x30);
+										LCD_Write(IDE%10 + 0x30);
+										for(int a = 0; a<20; a++)  // clear name buffer
+										{
+											msg[a] = 0; // clear mess
+											m = 0; 
+										}
+										HAL_Delay(1000);
+										IDE++;
+										Flash_Erase(ADDRESS_DATA_STORAGE);
+										Flash_Write_Int(ADDRESS_DATA_STORAGE,IDE);
+									
+
+							}
 							ok = false;
 						}
-						else if (x == 0)
-						{
+						else if (v == 999){
+							ok = false;
+						}
+						else {
 							LCD_setCursor(3,0);
-							LCD_sendString("     LOI KHI THEM   ");
+							LCD_sendString(" DA TON TAI VAN TAY");
 							HAL_Delay(1000);
 						}
-						else if(x == 1 )// X�C NHAN NHAP DUNG VAN TAY HAI LAN
-						{
-							//LCD_Clear();
-							LCD_setCursor(3,1);
-							LCD_sendString("   THEM OK ID: ");
-							LCD_Write(IDE/10 + 0x30);
-							LCD_Write(IDE%10 + 0x30);
-							/*send name, IDE, Mode den serial*/
-							send_data_uart1(1, Admin, IDE, msg);
-							for(int a = 0; a<20; a++)  // clear name buffer
-							{
-								msg[a] = 0; // clear mess
-								m = 0; 
-							}
-							HAL_Delay(1000);
-							IDE++;
-							Flash_Erase(ADDRESS_DATA_STORAGE);
-							Flash_Write_Int(ADDRESS_DATA_STORAGE,IDE);
-		
-						}
-						ok = false;
-					}
-					else if (v == 999){
-						ok = false;
-					}
-					else {
-						LCD_setCursor(3,0);
-						LCD_sendString(" DA TON TAI VAN TAY");
-						HAL_Delay(1000);
 					}
 				}
-			}
-					
-		LCD_Clear();
-		}
-		else if (IDE == 999)
-		{
-			ok = false;
-		}
-		else 
-		{
+						
 			LCD_Clear();
-			LCD_setCursor(3, 0);
-			LCD_sendString("      SAI ADMIN    ");	
-			HAL_Delay(2000);
+			}
+			else if (IDE == 999)
+			{
+				ok = false;
+			}
+			else 
+			{
+				LCD_Clear();
+				LCD_setCursor(3, 0);
+				LCD_sendString("      SAI ADMIN    ");	
+				HAL_Delay(2000);
+			}
 		}
+	}
+	else { /// them vay tay khong xac nhan admin
+		LCD_Clear();
+		LCD_setCursor(0, 0);
+		LCD_sendString(" THEM VAN TAY ADMIN   ");
+		/*DOC BAN PHIM NHAP VAO TEN */
+		LCD_setCursor(1, 0);
+		LCD_sendString("   NHAP VAO TEN  ");
+		LCD_setCursor(2, 0);
+		LCD_sendString(">");
+		name_ok = false;
+		char ten[30] = "";
+		bool chay_van_tay = false;
+		while (name_ok == false)// nhap cho xong ten
+		{
+			quetphim(ten);
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
+			if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == 0) // thoat nhap ten
+			{	
+				HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+				name_ok = true; // add ten van tay
+				chay_van_tay = true;  // chay add van tay cam bien
+				ok = false; // thoat
+			}
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+		}
+		if (chay_van_tay == false) // neu khong nhap ten thi khog nhap van tay
+		{	
+			LCD_setCursor(1, 0);
+			LCD_sendString("  NHAP VAO VAN TAY  ");
+			if(verifyPassword() == 1 )
+			{	
+				int	v = fingerIDSearch(); // tim xem co van tay khong
+				if (v == -1)
+				{ // neu co van tay roi
+					IDE = Flash_Read_Int(ADDRESS_DATA_STORAGE);
+					int x = fingerEnroll(IDE);
+					if ( x == 99)
+					{
+						ok = false;
+					}
+					else if (x == 0)
+					{
+						LCD_setCursor(3,0);
+						LCD_sendString("     LOI KHI THEM   ");
+						HAL_Delay(1000);
+					}
+					else if(x == 1 )// X�C NHAN NHAP DUNG VAN TAY HAI LAN
+					{ 
+						send_data_uart1(1, Admin, IDE, msg);
+						LCD_setCursor(2,1);
+						LCD_sendString("   THEM OK ADMIN  ");						
+						LCD_setCursor(3,1);
+						LCD_sendString("  THEM OK ID: ");
+						LCD_Write(IDE/10 + 0x30);
+						LCD_Write(IDE%10 + 0x30);
+						/*send name, IDE, Mode den serial*/
+
+						for(int a = 0; a<20; a++)  // clear name buffer
+						{
+							msg[a] = 0; // clear mess
+							m = 0; 
+						}
+						HAL_Delay(1000);
+						IDE++;
+						Flash_Erase(ADDRESS_DATA_STORAGE);
+						Flash_Write_Int(ADDRESS_DATA_STORAGE,IDE);
+						phai_them_vantay_ad = false;
+					}
+					ok = false;
+				}
+				else if (v == 999){
+					ok = false;
+				}
+				else {
+					LCD_setCursor(3,0);
+					LCD_sendString(" DA TON TAI VAN TAY");
+					HAL_Delay(1000);
+				}
+			}
+		}		
+	LCD_Clear();
 	}
 }
 void xoavantay()
@@ -1159,37 +1244,49 @@ void xoavantay()
 
 void xoavantayall()
 {
-	LCD_Clear();
-	LCD_setCursor(0, 0);
-	LCD_sendString("   XAC NHAN ADMIN  ");	
-	if(verifyPassword() == 1 ) // xac nhan admin
-	{
-		IDE = fingerIDSearch();
-		if (IDE == 0) // bang 0: ADMIN
+	if (phai_them_vantay_ad == false)
+	{ // 
+		LCD_Clear();
+		LCD_setCursor(0, 0);
+		LCD_sendString("   XAC NHAN ADMIN  ");	
+		if(verifyPassword() == 1 ) // xac nhan admin
 		{
-			if(verifyPassword() == 1 )
+			IDE = fingerIDSearch();
+			if (IDE != 0) // bang 0: ADMIN
 			{
-				emptyDatabase();
+				if(verifyPassword() == 1 )
+				{
+					emptyDatabase();
+					LCD_Clear();
+					LCD_setCursor(2,1);
+					LCD_sendString("   DA XOA ALL   ");
+					HAL_Delay(1000);
+					LCD_Clear ();
+					ok = false;
+					phai_them_vantay_ad = true;
+					IDE=0;
+					Flash_Erase(ADDRESS_DATA_STORAGE);
+					Flash_Write_Int(ADDRESS_DATA_STORAGE,0);
+					// sau khi xoa toan bo them van tay admin luon
+					// GUI TIN HIEU XOA ALL CHO
+				}
+			}
+			else 
+			{
 				LCD_Clear();
-				LCD_setCursor(2,1);
-				LCD_sendString("     DA XOA      ");
-				HAL_Delay(1000);
-				LCD_Clear ();
+				LCD_setCursor(3 , 0);
+				LCD_sendString("      SAI ADMIN    ");	
+				HAL_Delay(2000);
 				ok = false;
-				IDE=0;
-				Flash_Erase(ADDRESS_DATA_STORAGE);
-				Flash_Write_Int(ADDRESS_DATA_STORAGE,0);
-				// sau khi xoa toan bo them van tay admin luon
-				
 			}
 		}
-	  else 
-		{
-			LCD_Clear();
+	}
+	else 
+	{
 			LCD_setCursor(3 , 0);
-			LCD_sendString("      SAI ADMIN    ");	
-			HAL_Delay(2000);
-		}
+			LCD_sendString("  CHUA CO VAN TAY  ");
+			HAL_Delay(1000);
+			ok = false;
 	}
 }
 void send_data_uart(uint8_t Mode, uint8_t Admin, uint8_t Id, uint8_t Name)

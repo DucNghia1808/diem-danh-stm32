@@ -46,13 +46,13 @@ compiling main.c...
     MX_USART1_UART_Init();
 ../Src/main.c(208): warning:  #177-D: variable "ten"  was declared but never referenced
   	char ten[30]="";
-../Src/main.c(1217): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+../Src/main.c(1314): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
   	HAL_UART_Transmit(&huart2, JSON, sizeof(JSON), 10); // gui 500ms 1 lan // ,10 timeout 
-../Src/main.c(1240): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+../Src/main.c(1337): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
   	HAL_UART_Transmit(&huart2, JSON, sizeof(JSON), 10); // gui 500ms 1 lan // ,10 timeout 
 ../Src/main.c: 11 warnings, 0 errors
 linking...
-Program Size: Code=18212 RO-data=292 RW-data=80 ZI-data=1432  
+Program Size: Code=23208 RO-data=428 RW-data=112 ZI-data=1944  
 FromELF: creating hex file...
 "Do_An\Do_An.axf" - 0 Error(s), 11 Warning(s).
 
