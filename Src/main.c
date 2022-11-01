@@ -125,6 +125,7 @@ bool name_ok = false;
 
 //char ten[30] = "";
 
+int modeIN_OUT = 0;
 int mode_vantay = 0;// bien mode
 bool ok = false;
 bool phai_them_vantay_ad = false;
@@ -977,9 +978,18 @@ void vantay()
 			}
 			else   //////// doc thu cong // truy xuat sql
 			{
-				send_data_uart1(3,1 , IDE, ""); // gui ID truy
-				HAL_Delay(2000);
-				LCD_Clear();
+				if (modeIN_OUT == 0) //IN PUT
+				{
+					send_data_uart1(3, 1 , IDE, ""); // gui ID truy
+					HAL_Delay(2000);
+					LCD_Clear();
+				}
+				else if (modeIN_OUT == 1)
+				{
+					send_data_uart1(4, 1, IDE, ""); // gui ID truy
+					HAL_Delay(2000);
+					LCD_Clear();
+				}
 			}
 		}
 }
