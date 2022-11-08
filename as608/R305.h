@@ -66,3 +66,5 @@ uint8_t getReply(uint8_t packet[]);
 
 uint8_t fingerEnroll(uint8_t id);		//dang ky van tay moi voi id
 int fingerIDSearch(void);				//tim id van tay
+
+void coikeuvt(int i); // ham coi keu

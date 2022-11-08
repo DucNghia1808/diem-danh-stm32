@@ -227,7 +227,41 @@ int8_t fingerFastSearch(void)
   
   return recvPacket[1];
 }
-
+void coikeuvt(int l)
+{
+	if(l == 0){ // tit 150ms
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_RESET);
+		HAL_Delay(150);
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_SET);
+	}
+	else if (l == 1 ) { // tit tit 1000ms
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_RESET);
+		HAL_Delay(250);
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_SET);
+		HAL_Delay(250);
+		
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_RESET);
+		HAL_Delay(250);
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_SET);
+		HAL_Delay(250);
+	}
+	else if (l == 2){ // tit tit tit 1200ms
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_RESET);
+		HAL_Delay(200);
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_SET);
+		HAL_Delay(200);
+		
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_RESET);
+		HAL_Delay(200);
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_SET);
+		HAL_Delay(200);
+		
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_RESET);
+		HAL_Delay(200);
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_SET);
+		HAL_Delay(200);
+	}
+}
 
 uint8_t fingerEnroll(uint8_t id)
 {
@@ -240,6 +274,7 @@ uint8_t fingerEnroll(uint8_t id)
 		{	
 			HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+			coikeuvt(1);
 			return 99;
 		}
 	}
@@ -247,14 +282,14 @@ uint8_t fingerEnroll(uint8_t id)
 	p = image2Tz(1);
 	if(p != FINGERPRINT_OK) // luu vao buffer loi
 	{ 
-		//LCD_Clear();
 		LCD_setCursor(2,0);
 		LCD_sendString("  LOI TAO KI TU  ");
 		return 0;
 	}
 	LCD_setCursor(3,0);
 	LCD_sendString("    DANG CAPTURED  ");
-	HAL_Delay(1000);
+	coikeuvt(0);
+	HAL_Delay(850);
 	p = -1;
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
 	while (p != FINGERPRINT_NOFINGER)
@@ -264,6 +299,7 @@ uint8_t fingerEnroll(uint8_t id)
 			{	
 				HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+				coikeuvt(0);
 				return 99;
 			}
   	}
@@ -278,6 +314,7 @@ uint8_t fingerEnroll(uint8_t id)
 			{	
 				HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+				coikeuvt(0);
 				return 99;
 			}
 	}
@@ -308,7 +345,7 @@ uint8_t fingerEnroll(uint8_t id)
 	{
 		//LCD_Clear();
 		LCD_setCursor(3,0);
-		LCD_sendString("    THEM THAT BAI  ");
+		LCD_sendString("    THEM THAT BAI   ");
 		return 0;
 	}
 }
@@ -324,6 +361,7 @@ int fingerIDSearch(void)
 		{	
 			HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+			coikeuvt(0);
 			return 999;
 		}
 	}

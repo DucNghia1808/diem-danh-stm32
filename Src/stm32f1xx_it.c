@@ -199,7 +199,6 @@ void SysTick_Handler(void)
 /* please refer to the startup file (startup_stm32f1xx.s).                    */
 /******************************************************************************/
 
-
 /**
   * @brief This function handles TIM2 global interrupt.
   */

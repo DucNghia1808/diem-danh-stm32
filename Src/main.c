@@ -56,7 +56,6 @@ I2C_HandleTypeDef hi2c1;
 
 TIM_HandleTypeDef htim2;
 
-
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
@@ -69,6 +68,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART2_UART_Init(void);
+
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -88,8 +88,6 @@ PUTCHAR_PROTOTYPE
 void quetphim(char *ten);
 void quetphimcontrol();
 
-
-void send_data_uart(uint8_t Mode, uint8_t Admin, uint8_t Id, uint8_t Name);
 void send_data_uart1(uint8_t Mode, uint8_t Admin, uint8_t Id, char * Name);
 void themvantay();
 void xoavantay();
@@ -99,6 +97,7 @@ void suavantay();
 void xoavantaytuPC(int id);
 void xulyJSON(char *dataJson);
 void Received(void);
+void coikeu(int l);
 
 /* USER CODE END PFP */
 
@@ -197,15 +196,16 @@ int main(void)
 	LCD_Clear();
 	LCD_setCursor(0, 0);
 	LCD_sendString("  DO AN TOT NGHIEP  ");
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_SET);
 	HAL_Delay(1000);
 	// set keypad
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
-	
-	m = 0;
 
+	m = 0;
+	
 	char ten[30]="";
 
   /* USER CODE END 2 */
@@ -245,6 +245,8 @@ int main(void)
 		}
 		else {
 			if (mode_vantay == 1){
+				LCD_setCursor(0, 0);
+				LCD_sendString("  DO AN TOT NGHIEP  ");
 				LCD_setCursor(1, 0);
 				LCD_sendString("|>  THEM VAN TAY   ");
 				LCD_setCursor(2, 0);
@@ -253,6 +255,8 @@ int main(void)
 				LCD_sendString("|    XOA TOAN BO   ");
 			}
 			else if (mode_vantay == 2){
+				LCD_setCursor(0, 0);
+				LCD_sendString("  DO AN TOT NGHIEP  ");
 				LCD_setCursor(1, 0);
 				LCD_sendString("|   THEM VAN TAY   ");
 				LCD_setCursor(2, 0);
@@ -261,6 +265,8 @@ int main(void)
 				LCD_sendString("|    XOA TOAN BO   ");
 			}
 			else if (mode_vantay == 3){
+				LCD_setCursor(0, 0);
+				LCD_sendString("  DO AN TOT NGHIEP  ");
 				LCD_setCursor(1, 0);
 				LCD_sendString("|   THEM VAN TAY   ");
 				LCD_setCursor(2, 0);
@@ -269,6 +275,8 @@ int main(void)
 				LCD_sendString("|>   XOA TOAN BO   ");
 			}
 			else if (mode_vantay == 4){
+				LCD_setCursor(0, 0);
+				LCD_sendString("  DO AN TOT NGHIEP  ");
 				LCD_setCursor(1, 0);
 				LCD_sendString("|    XOA VAN TAY   ");
 				LCD_setCursor(2, 0);
@@ -276,7 +284,9 @@ int main(void)
 				LCD_setCursor(3, 0);
 				LCD_sendString("|>    DIEM DANH    ");
 			}
-			else if (mode_vantay == 5){	
+			else if (mode_vantay == 5){
+				LCD_setCursor(0, 0);
+				LCD_sendString("  DO AN TOT NGHIEP  ");				
 				LCD_setCursor(1, 0);
 				LCD_sendString("|    XOA TOAN BO   ");
 				LCD_setCursor(2, 0);
@@ -416,7 +426,6 @@ static void MX_TIM2_Init(void)
   * @retval None
   */
 
-
 /**
   * @brief USART2 Initialization Function
   * @param None
@@ -466,13 +475,13 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13|GPIO_PIN_14, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : PC13 */
-  GPIO_InitStruct.Pin = GPIO_PIN_13;
+  /*Configure GPIO pins : PC13 PC14 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_14;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -842,6 +851,7 @@ void quetphim(char * ten)
 		for(int t=0; t<m; t++){
 				LCD_Write(msg[t]);
 		}
+		coikeu(0);
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_1) == 0);
 		HAL_Delay(delay_phim);
 	}	
@@ -883,6 +893,7 @@ void quetphim(char * ten)
 		for(int t=0; t<m; t++){
 				LCD_Write(msg[t]);
 		}
+		coikeu(0);
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_1) == 0);
 		HAL_Delay(delay_phim);
 	}	
@@ -904,6 +915,7 @@ void quetphimcontrol()
 		if (mode_vantay == 6){
 			mode_vantay = 1;
 		}
+		coikeu(0);
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == 0);
 	}
 	
@@ -919,7 +931,7 @@ void quetphimcontrol()
 			mode_vantay = 6;
 		}
 		mode_vantay-=1;
-
+		coikeu(0);
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == 0);
 	}
 	/* QUET VONG 3*/
@@ -932,6 +944,7 @@ void quetphimcontrol()
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 		ok = true;
 		LCD_Clear(); // clear menu
+		coikeu(0);
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == 0);
 	}
 	/* QUET VONG 4*/
@@ -943,21 +956,54 @@ void quetphimcontrol()
 		HAL_Delay(20);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 		LCD_CMD(0x0C);
+		coikeu(0);
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == 0);
 	}
 	
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
 
 }
-
+void coikeu(int l)
+{
+	if(l == 0){ // tit 150ms
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_RESET);
+		HAL_Delay(150);
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_SET);
+	}
+	else if (l == 1 ) { // tit tit 1000ms
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_RESET);
+		HAL_Delay(250);
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_SET);
+		HAL_Delay(250);
+		
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_RESET);
+		HAL_Delay(250);
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_SET);
+		HAL_Delay(250);
+	}
+	else if (l == 2){ // tit tit tit 1200ms
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_RESET);
+		HAL_Delay(200);
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_SET);
+		HAL_Delay(200);
+		
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_RESET);
+		HAL_Delay(200);
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_SET);
+		HAL_Delay(200);
+		
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_RESET);
+		HAL_Delay(200);
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_SET);
+		HAL_Delay(200);
+	}
+}
 void suavantay()
 {
 
 }
 
 ///////////// JSON
-
-
 
 void xulyJSON(char *dataJson)
 {
@@ -1029,7 +1075,8 @@ void vantay()
 					LCD_sendString("    VAN TAY SAI   ");
 					LCD_setCursor(2, 0);
 					LCD_sendString("  XIN HAY THU LAI  ");
-					HAL_Delay(2000);
+					coikeu(2);
+					HAL_Delay(800);
 					LCD_Clear();
 			}
 			else if (IDE == 999) // thoat mode diem danh
@@ -1041,13 +1088,17 @@ void vantay()
 				if (modeIN_OUT == 0) //IN PUT
 				{
 					send_data_uart1(3, 1 , IDE, ""); // gui ID truy
-					HAL_Delay(2000);
+					HAL_Delay(400);
+					coikeu(1);
+					HAL_Delay(600);
 					LCD_Clear();
 				}
 				else if (modeIN_OUT == 1)
 				{
 					send_data_uart1(4, 1, IDE, ""); // gui ID truy
-					HAL_Delay(2000);
+					HAL_Delay(400);
+					coikeu(1);
+					HAL_Delay(600);
 					LCD_Clear();
 				}
 			}
@@ -1068,6 +1119,7 @@ void themvantay()
 				LCD_Clear();
 				LCD_setCursor(0, 0);
 				LCD_sendString("    THEM VAN TAY   ");
+				coikeu(0);
 				/*DOC BAN PHIM NHAP VAO TEN */
 				LCD_setCursor(1, 0);
 				LCD_sendString("   NHAP VAO TEN  ");
@@ -1089,6 +1141,7 @@ void themvantay()
 					}
 					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
 				}
+				coikeu(0);
 				if (chay_van_tay == false) // neu khong nhap ten thi khog nhap van tay
 				{	
 					LCD_setCursor(1, 0);
@@ -1108,7 +1161,7 @@ void themvantay()
 							{
 								LCD_setCursor(3,0);
 								LCD_sendString("     LOI KHI THEM   ");
-								HAL_Delay(1000);
+								coikeu(2);
 							}
 							else if(x == 1 )// X�C NHAN NHAP DUNG VAN TAY HAI LAN
 							{
@@ -1125,12 +1178,10 @@ void themvantay()
 											msg[a] = 0; // clear mess
 											m = 0; 
 										}
-										HAL_Delay(1000);
+										coikeu(1);
 										IDE++;
 										Flash_Erase(ADDRESS_DATA_STORAGE);
 										Flash_Write_Int(ADDRESS_DATA_STORAGE,IDE);
-									
-
 							}
 							ok = false;
 						}
@@ -1140,12 +1191,11 @@ void themvantay()
 						else {
 							LCD_setCursor(3,0);
 							LCD_sendString(" DA TON TAI VAN TAY");
-							HAL_Delay(1000);
+							coikeu(2);
 						}
 					}
-				}
-						
-			LCD_Clear();
+				}		
+				LCD_Clear();
 			}
 			else if (IDE == 999)
 			{
@@ -1156,7 +1206,8 @@ void themvantay()
 				LCD_Clear();
 				LCD_setCursor(3, 0);
 				LCD_sendString("      SAI ADMIN    ");	
-				HAL_Delay(2000);
+				coikeu(2);
+				HAL_Delay(800);
 			}
 		}
 	}
@@ -1185,6 +1236,7 @@ void themvantay()
 			}
 			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
 		}
+		coikeu(0);
 		if (chay_van_tay == false) // neu khong nhap ten thi khog nhap van tay
 		{	
 			LCD_setCursor(1, 0);
@@ -1204,7 +1256,7 @@ void themvantay()
 					{
 						LCD_setCursor(3,0);
 						LCD_sendString("     LOI KHI THEM   ");
-						HAL_Delay(1000);
+						coikeu(2);
 					}
 					else if(x == 1 )// X�C NHAN NHAP DUNG VAN TAY HAI LAN
 					{ 
@@ -1216,13 +1268,13 @@ void themvantay()
 						LCD_Write(IDE/10 + 0x30);
 						LCD_Write(IDE%10 + 0x30);
 						/*send name, IDE, Mode den serial*/
-
+						
 						for(int a = 0; a<20; a++)  // clear name buffer
 						{
 							msg[a] = 0; // clear mess
 							m = 0; 
 						}
-						HAL_Delay(1000);
+						coikeu(1);
 						IDE++;
 						Flash_Erase(ADDRESS_DATA_STORAGE);
 						Flash_Write_Int(ADDRESS_DATA_STORAGE,IDE);
@@ -1236,7 +1288,7 @@ void themvantay()
 				else {
 					LCD_setCursor(3,0);
 					LCD_sendString(" DA TON TAI VAN TAY");
-					HAL_Delay(1000);
+					coikeu(2);
 				}
 			}
 		}		
@@ -1253,7 +1305,7 @@ void xoavantay()
 		IDE = fingerIDSearch();
 		if (IDE == 0) // bang 0: ADMIN
 		{
-			HAL_Delay(1000);
+			coikeu(0);
 			if(verifyPassword() == 1 )
 			{	
 				LCD_Clear();
@@ -1261,6 +1313,7 @@ void xoavantay()
 				LCD_sendString("     XOA VAN TAY   ");
 				LCD_setCursor(1,0);
 				LCD_sendString("   MOI DAT TAY VAO ");
+				//coikeu(0);
 				HAL_Delay(1000);
 				y = fingerIDSearch();
 				if (y == 999)
@@ -1273,7 +1326,7 @@ void xoavantay()
 					LCD_sendString("      KHONG THE    ");
 					LCD_setCursor(3,0);
 					LCD_sendString("  XOA VAN TAY ADMIN");
-					HAL_Delay(1000);
+					coikeu(2);
 				}
 				else if (y != -1) // co van tay thi xoa
 				{
@@ -1285,14 +1338,15 @@ void xoavantay()
 					LCD_Write(y/10 + 0x30);
 					LCD_Write(y%10 + 0x30);
 					send_data_uart1(2, Admin, y,"");
-					HAL_Delay(1000);
+					coikeu(1);
 				}
 				else { // khong co van tay
 					LCD_setCursor(2,0);
 					LCD_sendString("     VAN TAY SAI   ");
 					LCD_setCursor(3,0);
 					LCD_sendString("   XIN HAY THU LAI ");
-					HAL_Delay(1000);
+					coikeu(2);
+					HAL_Delay(800);
 				}
 				LCD_Clear ();
 				ok = false;
@@ -1307,7 +1361,7 @@ void xoavantay()
 			LCD_Clear();
 			LCD_setCursor(3 , 0);
 			LCD_sendString("      SAI ADMIN    ");	
-			HAL_Delay(2000);
+			coikeu(2);
 		}
 	}
 }
@@ -1330,7 +1384,7 @@ void xoavantayall()
 					LCD_Clear();
 					LCD_setCursor(2,1);
 					LCD_sendString("   DA XOA ALL   ");
-					HAL_Delay(1000);
+					coikeu(1);
 					LCD_Clear ();
 					ok = false;
 					phai_them_vantay_ad = true;
@@ -1346,7 +1400,7 @@ void xoavantayall()
 				LCD_Clear();
 				LCD_setCursor(3 , 0);
 				LCD_sendString("      SAI ADMIN    ");	
-				HAL_Delay(2000);
+				coikeu(2);
 				ok = false;
 			}
 		}
@@ -1355,34 +1409,11 @@ void xoavantayall()
 	{
 			LCD_setCursor(3 , 0);
 			LCD_sendString("  CHUA CO VAN TAY  ");
-			HAL_Delay(1000);
+			coikeu(2);
 			ok = false;
 	}
 }
-void send_data_uart(uint8_t Mode, uint8_t Admin, uint8_t Id, uint8_t Name)
-{
-	char JSON[100] = "";
-	char Str_Mode[10] = ""; 
-	char Str_Admin[10] = "";
-	char Str_Id[10] = "";
-	char Str_Name[10] = "";
 
-	sprintf(Str_Mode, "%d", Mode); 
-	sprintf(Str_Admin, "%d", Admin);
-	sprintf(Str_Id, "%d", Id);
-	sprintf(Str_Name, "%d", Name);
-	// {\"TB1\":"1"}
-	strcat(JSON, "{\"Mode\":\"");
-	strcat(JSON, Str_Mode); strcat(JSON, "\",");
-	strcat(JSON, "\"Admin\":\"");
-	strcat(JSON, Str_Admin); strcat(JSON, "\",");
-
-	strcat(JSON, "\"Id\":\"");
-	strcat(JSON, Str_Id); strcat(JSON, "\",");
-	strcat(JSON, "\"Name\":\"");
-	strcat(JSON, Str_Name); strcat(JSON, "\"}\n\n");
-	HAL_UART_Transmit(&huart2, JSON, sizeof(JSON), 10); // gui 500ms 1 lan // ,10 timeout 
-}
 void send_data_uart1(uint8_t Mode, uint8_t Admin, uint8_t Id, char * Name)
 {
 	char JSON[80] = "";
@@ -1414,6 +1445,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) // call back interup
 		//send_data_uart(mode_vantay, Admin, IDE, Name);
 	}
 }
+
+
 /* USER CODE END 4 */
 
 /**
