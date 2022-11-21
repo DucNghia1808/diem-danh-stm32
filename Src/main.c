@@ -248,51 +248,41 @@ int main(void)
 				LCD_setCursor(0, 0);
 				LCD_sendString("  DO AN TOT NGHIEP  ");
 				LCD_setCursor(1, 0);
-				LCD_sendString("|>  THEM VAN TAY   ");
+				LCD_sendString("|>  THEM VAN TAY    ");
 				LCD_setCursor(2, 0);
-				LCD_sendString("|    XOA VAN TAY   ");
+				LCD_sendString("|    XOA VAN TAY    ");
 				LCD_setCursor(3, 0);
-				LCD_sendString("|    XOA TOAN BO   ");
+				LCD_sendString("|    XOA TOAN BO    ");
 			}
 			else if (mode_vantay == 2){
 				LCD_setCursor(0, 0);
 				LCD_sendString("  DO AN TOT NGHIEP  ");
 				LCD_setCursor(1, 0);
-				LCD_sendString("|   THEM VAN TAY   ");
-				LCD_setCursor(2, 0);
-				LCD_sendString("|>   XOA VAN TAY   ");
+				LCD_sendString("|   THEM VAN TAY    ");
+				LCD_setCursor(2, 0); 
+				LCD_sendString("|>   XOA VAN TAY    ");
 				LCD_setCursor(3, 0);
-				LCD_sendString("|    XOA TOAN BO   ");
+				LCD_sendString("|    XOA TOAN BO    ");
 			}
 			else if (mode_vantay == 3){
 				LCD_setCursor(0, 0);
 				LCD_sendString("  DO AN TOT NGHIEP  ");
 				LCD_setCursor(1, 0);
-				LCD_sendString("|   THEM VAN TAY   ");
+				LCD_sendString("|   THEM VAN TAY    ");
 				LCD_setCursor(2, 0);
-				LCD_sendString("|    XOA VAN TAY   ");
+				LCD_sendString("|    XOA VAN TAY    ");
 				LCD_setCursor(3, 0);
-				LCD_sendString("|>   XOA TOAN BO   ");
+				LCD_sendString("|>   XOA TOAN BO    ");
 			}
 			else if (mode_vantay == 4){
 				LCD_setCursor(0, 0);
 				LCD_sendString("  DO AN TOT NGHIEP  ");
 				LCD_setCursor(1, 0);
-				LCD_sendString("|    XOA VAN TAY   ");
+				LCD_sendString("|    XOA VAN TAY    ");
 				LCD_setCursor(2, 0);
-				LCD_sendString("|    XOA TOAN BO   ");
+				LCD_sendString("|    XOA TOAN BO    ");
 				LCD_setCursor(3, 0);
-				LCD_sendString("|>    DIEM DANH    ");
-			}
-			else if (mode_vantay == 5){
-				LCD_setCursor(0, 0);
-				LCD_sendString("  DO AN TOT NGHIEP  ");				
-				LCD_setCursor(1, 0);
-				LCD_sendString("|    XOA TOAN BO   ");
-				LCD_setCursor(2, 0);
-				LCD_sendString("|     DIEM DANH    ");
-				LCD_setCursor(3, 0);
-				LCD_sendString("|>    NHAP TEN     ");
+				LCD_sendString("|>    DIEM DANH     ");
 			}
 			else 
 			{
@@ -912,7 +902,7 @@ void quetphimcontrol()
 		HAL_Delay(20);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 		mode_vantay+=1;
-		if (mode_vantay == 6){
+		if (mode_vantay == 5){
 			mode_vantay = 1;
 		}
 		coikeu(0);
@@ -928,7 +918,7 @@ void quetphimcontrol()
 		HAL_Delay(20);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 		if (mode_vantay == 1){
-			mode_vantay = 6;
+			mode_vantay = 5;
 		}
 		mode_vantay-=1;
 		coikeu(0);
